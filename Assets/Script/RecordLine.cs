@@ -1,16 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class RecordLine : MonoBehaviour
 {
-    public Text name;
+    [FormerlySerializedAs("name")] public Text displayName;
     public Image flag;
 
     public void SetRecord(string word, Sprite picture)
     {
-        name.text = word;
+        displayName.text = word;
         flag.sprite = picture;
     }
 }

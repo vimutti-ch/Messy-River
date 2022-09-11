@@ -9,12 +9,7 @@ public class SoundManager : MonoBehaviour
         Move,
         Water,
         Crocodile,
-        WoodLog,
-        Play,
-        Finish,
-        Grass,
-        Jump,
-        Bounce
+        WoodLog
     }
 
     [SerializeField] private Sound[] sounds;

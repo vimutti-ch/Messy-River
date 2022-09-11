@@ -1,30 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Drown : MonoBehaviour
 {
-    private Restart re;
-    private float time;
+    private Restart _re;
+    private float _time;
     public float limit;
+
+    private void Awake()
+    {
+        _re = GameObject.FindGameObjectWithTag("GameController").GetComponent<Restart>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Water")
+        if (other.CompareTag("Water"))
         {
-            restart();
+            Restart();
         }
     }
 
-    public void restart()
+    public void Restart()
     {
-        re = GameObject.FindGameObjectWithTag("GameController").GetComponent<Restart>();
-        StartCoroutine(fall());
+        StartCoroutine(Fall());
     }
 
     // Update is called once per frame
-    IEnumerator fall()
+    private IEnumerator Fall()
     {
         yield return new WaitForSeconds(limit);
-        re.resetgame();
+        _re.resetgame();
     }
 }

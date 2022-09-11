@@ -1,195 +1,225 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class Move : MonoBehaviour
 {
-    private Rigidbody rgb;
+    private Rigidbody _rgb;
     public float distance;
+    public float blockScale = 1f;
     public ParticleSystem particle;
     public Timer timer;
     public GameObject inputName;
     public float force;
-    public Jump jumpAni;
-    public float blockScale = 1f;
-    public LayerMask treeLayer;
+    public Animator animator;
 
-    private Vector2 startPos, endPos;
+    public LayerMask treeLayers;
+    
+    public Jump jumpAni;
+
+    private Vector2 _startPos, _endPos;
     public float deadZone;
 
-    private bool controlable = true;
-    private Vector3 originalScale;
+    private bool _controllable = true;
+    private Vector3 _originalScale;
 
     void Update()
     {
-        if (Input.touchCount > 0)
+        if (_controllable)
         {
-            Touch touch = Input.GetTouch(0);
-
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    startPos = Input.GetTouch(0).position;
-                        break;
-                case TouchPhase.Ended:
-                    endPos = Input.GetTouch(0).position;
-
-                    if (endPos.x < startPos.x - deadZone)
-                    {
-                        left();
-                    }
-
-                    else if (endPos.x > startPos.x + deadZone)
-                    {
-                        right();
-                    }
-
-                    else if (endPos.y < startPos.y - deadZone/1.5f)
-                    {
-                        back();
-                    }
-
-                    else
-                    {
-                        forward();
-                    }
-                    break;
-
-            }
+            KeyboardControl();
+            TouchControl();
         }
-    if (controlable)
-        {
-            PcControl(); 
-        }
-
-
-
-
+        
+        Debug.DrawRay(transform.position, Vector3.forward*blockScale, Color.red);
+        
         CheckBelow();
     }
+
     private void Start()
     {
-        rgb = GetComponent<Rigidbody>();
-        originalScale = transform.localScale;
+        _rgb = GetComponent<Rigidbody>();
+        _originalScale = transform.localScale;
     }
-    private void attach(Transform obj) {
+
+    private void Attach(Transform obj)
+    {
         transform.SetParent(obj);
-        rgb.constraints = RigidbodyConstraints.FreezePosition;
+        _rgb.constraints = RigidbodyConstraints.FreezePosition;
         ResetScale();
     }
-    private void detach()
+
+    private void Detach()
     {
         transform.SetParent(null);
-        rgb.constraints = RigidbodyConstraints.None;
-        rgb.constraints = RigidbodyConstraints.FreezeRotation;
+        _rgb.constraints = RigidbodyConstraints.None;
+        _rgb.constraints = RigidbodyConstraints.FreezeRotation;
         ResetScale();
     }
+
     private void OnCollisionEnter(Collision colide)
     {
-        if (colide.gameObject.tag == "Wood" || colide.gameObject.tag == "Crocobody") attach(colide.transform);
+        if (colide.gameObject.CompareTag("Wood") || colide.gameObject.CompareTag("Crocobody")) Attach(colide.transform);
     }
+
     private void OnBecameInvisible()
     {
-        GetComponent<Drown>().restart();
+        GetComponent<Drown>().Restart();
     }
 
     private void CheckBelow()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, distance))
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, distance))
         {
             switch (hit.transform.tag)
             {
                 case "Water":
                     particle.Play();
                     GetComponent<BoxCollider>().enabled = false;
-                    GetComponent<Drown>().restart();
-                    detach();
+                    GetComponent<Drown>().Restart();
+                    Detach();
                     enabled = false;
                     break;
                 case "Finish":
-                    timer.count = false;
-                    controlable = false;
+                    timer.SetStatus(false);
+                    _controllable = false;
                     inputName.SetActive(true);
+                    animator.SetBool("open", true);
                     break;
                 case "Crocohead":
                 case "Crocotail":
-                    detach();
-                    rgb.AddForce(new Vector3(0, force, 0));
-                    GetComponent<Drown>().restart();
+                    Detach();
+                    _rgb.AddForce(new Vector3(0, force, 0));
+                    GetComponent<Drown>().Restart();
                     break;
             }
         }
-        
+
         Debug.DrawRay(transform.position, Vector3.down * distance, Color.red);
     }
 
-    public void saveRecord()
+    // public void saveRecord()
+    // {
+    //     RecordInfo info = timer.SetRecord();
+    //     Record.AddInfo(info);
+    //     GameObject.FindGameObjectWithTag("GameController").GetComponent<Restart>().resetgame();
+    // }
+
+    public void SaveRecord()
     {
-        DataPersistanceManager.instance.SaveGame();
+        DataPersistanceManager.Instance.SaveGame();
         GameObject.FindGameObjectWithTag("GameController").GetComponent<Restart>().resetgame();
     }
 
-    private void PcControl()
+    private void KeyboardControl()
     {
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
         {
-            forward();
+            Forward();
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            left();
+            Left();
         }
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            back();
+            Back();
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            right();
+            Right();
         }
     }
-    private void forward()
+
+    private void TouchControl()
+    {
+        if (Input.touchCount > 0) //Is there any touch?
+        {
+            Touch touch = Input.GetTouch(0); //Use which touch?
+        
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    _startPos = Input.GetTouch(0).position;
+                    break;
+                case TouchPhase.Ended:
+                    _endPos = Input.GetTouch(0).position;
+
+                    if (_endPos.x < _startPos.x - deadZone)
+                    {
+                        Left();
+                    }
+
+                    else if(_endPos.x > _startPos.x + deadZone)
+                    {
+                        Right();
+                    }
+
+                    else if(_endPos.y < _startPos.y - (deadZone/1.5f))
+                    {
+                        Back();
+                    }
+
+                    else
+                    {
+                        Forward();
+                    }
+                    
+                    break;
+            }
+        } 
+    }
+
+    private void Forward()
     {
         jumpAni.JumpAnim();
-        detach();
+        Detach();
         transform.rotation = Quaternion.Euler(-90, -90, 0);
-        checkTree(Vector3.forward);
-        playon();
+
+        CheckTree(Vector3.forward);
+        
+        PlayOn();
     }
 
-    private void left()
+    private void Left()
     {
         jumpAni.JumpAnim();
-        checkTree(Vector3.left);
         transform.rotation = Quaternion.Euler(-90, -90, -90);
-        playon();
+        
+        CheckTree(Vector3.left);
+        
+        PlayOn();
     }
 
-    private void back()
+    private void Back()
     {
         jumpAni.JumpAnim();
-        detach();
-        checkTree(Vector3.back);
+        Detach();
         transform.rotation = Quaternion.Euler(-90, -90, 180);
-        playon();
+        
+        CheckTree(Vector3.back);
+        
+        PlayOn();
     }
 
-    private void right()
+    private void Right()
     {
         jumpAni.JumpAnim();
-        checkTree(Vector3.right);
         transform.rotation = Quaternion.Euler(-90, -90, 90);
-        playon();
+        
+        CheckTree(Vector3.right);
+        
+        PlayOn();
     }
+
     private void ResetScale()
     {
-        transform.localScale = originalScale;
+        transform.localScale = _originalScale;
     }
-    private void playon()
+
+    private void PlayOn()
     {
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, distance))
@@ -199,36 +229,15 @@ public class Move : MonoBehaviour
                 case "Wood":
                     SoundManager.instance.Play(SoundManager.SoundName.WoodLog);
                     break;
-
-                case "Crocobody":
-                    SoundManager.instance.Play(SoundManager.SoundName.Crocodile);
-                    break;
-
-                case "Finish":
-                    SoundManager.instance.Play(SoundManager.SoundName.Finish);
-                    break;
-
-                case "Grass":
-                    SoundManager.instance.Play(SoundManager.SoundName.Grass);
-                    break;
-                case "Water":
-                    SoundManager.instance.Play(SoundManager.SoundName.Water);
-                    break;
-                case "Crocohead":
-                case "CrocoTail":
-                    SoundManager.instance.Play(SoundManager.SoundName.Bounce);
-                    break;
             }
         }
     }
-    private void checkTree(Vector3 direction)
+
+    private void CheckTree(Vector3 direction)
     {
-        if (Physics.Raycast(transform.position, direction, blockScale, treeLayer)) { }
-        else
+        if (Physics.Raycast(transform.position, direction, blockScale, treeLayers))
         {
-            transform.position += direction;
         }
+        else transform.position += direction;
     }
 }
-
-

@@ -1,26 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 [System.Serializable]
 public class GameData
 {
-    public int minute;
-    public int second;
-    public int millisecond;
-    public string name;
-    public string country;
-    public Sprite flag;
+    public int[] time;
+    public string[] name;
 
- 
-    public GameData()
+    // The values defined in this constructor will be the default values
+    // The game starts with when there's no data to load
+    public GameData() // Default Value
     {
-        this.minute = 0;
-        this.second = 0;
-        this.millisecond = 0;
-        this.name = null;
-        this.country = null;
-        this.flag = null;
+        this.time = new int[5] {0,0,0,0,0};
+        this.name = new string[5] {null, null, null, null, null};
     }
-
 }

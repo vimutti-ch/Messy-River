@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 955902dd86fd93d45b57bc92cb48ec2e, type: 3}
+  m_Name: Country Info
+  m_EditorClassIdentifier: 
+  country:
+  - abbreviate: USA
+    flag: {fileID: 21300000, guid: 12f985235247d5246bd2df118ba7882c, type: 3}
+  - abbreviate: CHN
+    flag: {fileID: 21300000, guid: 23fd2c39dd2d1b14da51419438666d52, type: 3}
+  - abbreviate: JPN
+    flag: {fileID: 21300000, guid: 1ce74d43cbb257543afd33707c759e2f, type: 3}
+  - abbreviate: JAM
+    flag: {fileID: 21300000, guid: 7b11608c533b01240869cfef025f81aa, type: 3}
+  - abbreviate: ITA
+    flag: {fileID: 21300000, guid: 7bcd26f431a591c4bad441cee68afd7c, type: 3}
+  - abbreviate: SRB
+    flag: {fileID: 21300000, guid: 221a04ac81f997449adcf6e3811eb7bc, type: 3}
+  - abbreviate: ESP
+    flag: {fileID: 21300000, guid: d77da70ed803ab8468c007d8a352f38c, type: 3}
+  - abbreviate: SUI
+    flag: {fileID: 21300000, guid: 7583ce263cf96c442972214458cba4b7, type: 3}

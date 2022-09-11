@@ -1,22 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FinishPoint : MonoBehaviour
 {
     public int positiveFinish;
+
     public int negativeFinish;
+
     // Start is called before the first frame update
     void Start()
     {
         RandomPosition();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Tree"))
-        { 
-            Debug.Log("Sufficate in Tree");
+        {
+            Debug.Log("Suffocate in Tree");
             RandomPosition();
         }
     }
