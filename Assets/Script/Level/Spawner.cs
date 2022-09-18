@@ -46,8 +46,6 @@ public class Spawner : MonoBehaviour
     {
         while (!gameOver)
         {
-            yield return new WaitForSeconds(spawnDelay);
-
             Vector3 spawnPosition = new Vector3(pos.position.x, pos.position.y, (int)pos.position.z);
 
             int percent = Random.Range(0, 100);
@@ -64,6 +62,8 @@ public class Spawner : MonoBehaviour
             
             item.SetSpeed(speed);
             item.SetDirection(direction);
+            
+            yield return new WaitForSeconds(spawnDelay);
         }
 
 

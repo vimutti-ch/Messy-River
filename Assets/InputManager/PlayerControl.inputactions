@@ -89,6 +89,17 @@
                 },
                 {
                     "name": "",
+                    "id": "c7df85f0-e252-43e0-a064-1c68227b7ada",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Forward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "614e9be4-080f-4de3-ab2a-e01c17c5cc8f",
                     "path": "<Keyboard>/s",
                     "interactions": "",

@@ -132,6 +132,7 @@ public class Move : MonoBehaviour
                     enabled = false;
                     break;
                 case "Finish":
+                    timer.PassResult();
                     timer.SetStatus(false);
                     _controllable = false;
                     inputName.SetActive(true);
@@ -159,7 +160,7 @@ public class Move : MonoBehaviour
     public void SaveRecord()
     {
         DataPersistanceManager.Instance.SaveGame();
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<Restart>().ResetGame();
+        /*GameObject.FindGameObjectWithTag("GameController").GetComponent<Restart>().ResetGame();*/
     }
 
     // private void KeyboardControl()

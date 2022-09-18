@@ -5,21 +5,26 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour, ISave
 {
+    public string TimeRecord => timerText;
+    
     [Header("Object Assign")]
     [FormerlySerializedAs("name")] public InputField username;
     public Dropdown country;
+    public Text resultTimer;
+    public Text dateText;
     public PlayfabManager playfabManager;
 
     [Header("Status")]
     public bool saveUpdate;
     public bool recordUpdated;
+    public string timerText;
     
     private bool _count;
     
     private float _timer;
     private Text _timeText;
     private int _minute;
-    
+
     void Start()
     {
         _timeText = GetComponent<Text>();//Assign text component of itself to time text
@@ -33,7 +38,10 @@ public class Timer : MonoBehaviour, ISave
             _minute += 1;
             _timer = 0;
         }
-        _timeText.text = $"{_minute:00}:{_timer.ToString("00.00").Substring(0, 2)}:{_timer.ToString("00.00").Substring(3, 2)}";
+        timerText =
+            $"{_minute:00}:{_timer.ToString("00.00").Substring(0, 2)}:{_timer.ToString("00.00").Substring(3, 2)}";
+        
+        _timeText.text = timerText;
     }
 
     public void SetStatus(bool stage)
@@ -112,5 +120,53 @@ public class Timer : MonoBehaviour, ISave
         //data.flag = country.options[country.value].image;
         
         if(!saveUpdate) Debug.Log("No data update.");
+    }
+
+    public void PassResult()
+    {
+        resultTimer.text = timerText;
+
+        string date = DateTime.Now.Year.ToString();
+        switch (DateTime.Now.Month)
+        {
+            case 1:
+                date += "January";
+                break;
+            case 2:
+                date += "February";
+                break;
+            case 3:
+                date += "March";
+                break;
+            case 4:
+                date += "April";
+                break;
+            case 5:
+                date += "May";
+                break;
+            case 6:
+                date += "June";
+                break;
+            case 7:
+                date += "July";
+                break;
+            case 8:
+                date += "August";
+                break;
+            case 9:
+                date += "September";
+                break;
+            case 10:
+                date += "October";
+                break;
+            case 11:
+                date += "November";
+                break;
+            case 12:
+                date += "December";
+                break;
+        }
+
+        dateText.text = date;
     }
 }
