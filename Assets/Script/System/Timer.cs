@@ -130,40 +130,40 @@ public class Timer : MonoBehaviour, ISave
         switch (DateTime.Now.Month)
         {
             case 1:
-                date += "January";
+                date += "Jan";
                 break;
             case 2:
-                date += "February";
+                date += "Feb";
                 break;
             case 3:
-                date += "March";
+                date += "Mar";
                 break;
             case 4:
-                date += "April";
+                date += "Apr";
                 break;
             case 5:
                 date += "May";
                 break;
             case 6:
-                date += "June";
+                date += "Jun";
                 break;
             case 7:
-                date += "July";
+                date += "Jul";
                 break;
             case 8:
-                date += "August";
+                date += "Aug";
                 break;
             case 9:
-                date += "September";
+                date += "Sep";
                 break;
             case 10:
-                date += "October";
+                date += "Oct";
                 break;
             case 11:
-                date += "November";
+                date += "Nov";
                 break;
             case 12:
-                date += "December";
+                date += "Dec";
                 break;
         }
 
