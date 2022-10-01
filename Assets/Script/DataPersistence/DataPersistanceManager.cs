@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -50,8 +51,16 @@ public class DataPersistanceManager : MonoBehaviour
         // load any saved data from a file using the data handler
         this._gameData = _dataHandler.Load();
         Debug.Log("File Load Done");
+
+        try
+        {
+            playfabManager.GetLeaderboard();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
         
-        playfabManager.GetLeaderboard();
         Debug.Log("Get Leaderboard done");
 
         // if no data can be Loaded, initialize to a new game

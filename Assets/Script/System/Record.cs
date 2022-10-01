@@ -34,33 +34,7 @@ public class Record : MonoBehaviour, ILoad
 
     #region - Unity's Method (คำสั่งของ Unity เอง) -
     
-    private void Start()
-    {
-        prRect = puRect;
-        y = prRect.localPosition.y - space;
-
-        string[] word = new string[recordLimiter];
-
-        for (int i = 0; i < recordLimiter; i++)
-        {
-            if (_name[i] == null) return;
-
-            word[i] =
-                $"{this._minute[i].ToString("00")}:{this._second[i].ToString("00")}:{this._millisecond[i].ToString("00")} - {this._name[i]}\n";
-
-            var obj = Instantiate(recordText, Vector2.zero, Quaternion.identity);
-            obj.transform.SetParent(this.transform);
-            RectTransform rect = obj.GetComponent<RectTransform>();
-            rect.localPosition = new Vector3(puRect.localPosition.x, y, 0);
-            rect.localScale = new Vector3(size, size, size);
-
-            RecordLine line = obj.GetComponent<RecordLine>();
-
-            line.SetRecord(word[i], this._flag[i]);
-
-            y = y - space;
-        }
-    }
+    //Nothing Here
 
     #endregion
 
@@ -115,8 +89,50 @@ public class Record : MonoBehaviour, ILoad
             this._country[i] = data.name[i].Substring(0, 3).ToUpper();
             this._flag[i] = FindFlag(_country[i]);
 
-            Debug.Log($"Load Data #{i}");
+            Debug.Log($"Load Data #{i}: {_name[i]} - {time[i]}");
+            
+            CreateLeaderboard();
         }
+    }
+    
+    private void CreateLeaderboard()
+    {
+        Debug.Log("Start Create Leaderboard");
+        
+        prRect = puRect;
+        y = prRect.localPosition.y - space;
+
+        string[] word = new string[recordLimiter];
+        
+        Debug.Log("Before loop");
+        for (int i = 0; i < recordLimiter; i++)
+        {
+            Debug.Log("Enter Loop");
+            if (_name[i] == null)
+            {
+                Debug.Log("Return");
+                return;
+            }
+            
+            word[i] =
+                $"{this._minute[i].ToString("00")}:{this._second[i].ToString("00")}:{this._millisecond[i].ToString("00")} - {this._name[i]}\n";
+
+            var obj = Instantiate(recordText, Vector2.zero, Quaternion.identity);
+            obj.transform.SetParent(this.transform);
+            RectTransform rect = obj.GetComponent<RectTransform>();
+            rect.localPosition = new Vector3(puRect.localPosition.x, y, 0);
+            rect.localScale = new Vector3(size, size, size);
+
+            RecordLine line = obj.GetComponent<RecordLine>();
+
+            line.SetRecord(word[i], this._flag[i]);
+
+            y = y - space;
+            
+            Debug.Log("Leaderboard Created");
+        }
+        
+        Debug.Log("Stop Create Leaderboard");
     }
 
     private Sprite FindFlag(string countryAbbreviate)

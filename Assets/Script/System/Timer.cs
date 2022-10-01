@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -8,10 +9,10 @@ public class Timer : MonoBehaviour, ISave
     public string TimeRecord => timerText;
     
     [Header("Object Assign")]
-    [FormerlySerializedAs("name")] public InputField username;
-    public Dropdown country;
-    public Text resultTimer;
-    public Text dateText;
+    [FormerlySerializedAs("name")] public TMP_InputField username;
+    public TMP_Dropdown country;
+    public TMP_Text resultTimer;
+    public TMP_Text dateText;
     public PlayfabManager playfabManager;
 
     [Header("Status")]
@@ -22,12 +23,12 @@ public class Timer : MonoBehaviour, ISave
     private bool _count;
     
     private float _timer;
-    private Text _timeText;
+    private TMP_Text _timeText;
     private int _minute;
 
     void Start()
     {
-        _timeText = GetComponent<Text>();//Assign text component of itself to time text
+        _timeText = GetComponent<TMP_Text>();//Assign text component of itself to time text
     }
     
     void Update()
