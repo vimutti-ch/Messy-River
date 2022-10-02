@@ -38,6 +38,8 @@ public class Move : MonoBehaviour
     private Vector2 _startPos, _endPos;
     private Vector3 _originalScale;
 
+    private bool _isEnd = false;
+
     #endregion
 
     #region - Unity's Method (คำสั่งของ Unity เอง) -
@@ -74,7 +76,7 @@ public class Move : MonoBehaviour
 
         Debug.DrawRay(transform.position, Vector3.forward * blockScale, Color.red);
 
-        CheckBelow();
+        if(!_isEnd) CheckBelow();
     }
 
     private void OnBecameInvisible()
@@ -122,6 +124,7 @@ public class Move : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, distance))
         {
+            Debug.Log($"Below is {hit.transform.tag}");
             switch (hit.transform.tag)
             {
                 case "Water":
@@ -137,6 +140,7 @@ public class Move : MonoBehaviour
                     _controllable = false;
                     inputName.SetActive(true);
                     animator.SetBool("open", true);
+                    _isEnd = true;
                     break;
                 case "Crocohead":
                 case "Crocotail":
@@ -292,6 +296,12 @@ public class Move : MonoBehaviour
         {
             transform.position += direction;
         }
+    }
+
+    [ContextMenu("Move to End's Z")]
+    void ToEndLine()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, 4);
     }
 
     #endregion
