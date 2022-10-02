@@ -29,6 +29,13 @@ public class Record : MonoBehaviour, ILoad
     private string[] _name;
     private string[] _country;
     private Sprite[] _flag;
+    
+    public int[] Minute => _minute;
+    public int[] Second => _second;
+    public int[] Millisecond => _millisecond;
+    public string[] Name => _name;
+    public string[] Country => _country;
+    public Sprite[] Flag => _flag;
 
     #endregion
 
