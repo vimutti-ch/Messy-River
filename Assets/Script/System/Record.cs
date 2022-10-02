@@ -29,6 +29,7 @@ public class Record : MonoBehaviour, ILoad
     private string[] _name;
     private string[] _country;
     private Sprite[] _flag;
+    private string[] _wholeTime;
     
     public int[] Minute => _minute;
     public int[] Second => _second;
@@ -36,12 +37,26 @@ public class Record : MonoBehaviour, ILoad
     public string[] Name => _name;
     public string[] Country => _country;
     public Sprite[] Flag => _flag;
+    public string[] WholeTime => _wholeTime;
 
+    public static Record Instance;
+    
     #endregion
 
     #region - Unity's Method (คำสั่งของ Unity เอง) -
-    
-    //Nothing Here
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        }
+        else
+        {
+            Destroy(Instance);
+        }
+    }
 
     #endregion
 
@@ -57,38 +72,39 @@ public class Record : MonoBehaviour, ILoad
         _name = new string[dataQuantity];
         _country = new string[dataQuantity];
         _flag = new Sprite[dataQuantity];
+        _wholeTime = new string[dataQuantity];
 
         for (int i = 0; i < dataQuantity; i++)
         {
             if (string.IsNullOrEmpty(data.name[i])) return;
 
-            string time = data.time[i].ToString();
+            _wholeTime[i] = data.time[i].ToString();
 
-            switch (time.Length)
+            switch (_wholeTime[i].Length)
             {
                 case 6:
-                    this._minute[i] = Convert.ToInt32(time.Substring(0, 2));
-                    this._second[i] = Convert.ToInt32(time.Substring(2, 2));
-                    this._millisecond[i] = Convert.ToInt32(time.Substring(4, 2));
+                    this._minute[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 2));
+                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(2, 2));
+                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(4, 2));
                     break;
                 case 5:
-                    this._minute[i] = Convert.ToInt32(time.Substring(0, 1));
-                    this._second[i] = Convert.ToInt32(time.Substring(1, 2));
-                    this._millisecond[i] = Convert.ToInt32(time.Substring(3, 2));
+                    this._minute[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 1));
+                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(1, 2));
+                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(3, 2));
                     break;
                 case 4:
-                    this._second[i] = Convert.ToInt32(time.Substring(0, 2));
-                    this._millisecond[i] = Convert.ToInt32(time.Substring(2, 2));
+                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 2));
+                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(2, 2));
                     break;
                 case 3:
-                    this._second[i] = Convert.ToInt32(time.Substring(0, 1));
-                    this._millisecond[i] = Convert.ToInt32(time.Substring(1, 2));
+                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 1));
+                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(1, 2));
                     break;
                 case 2:
-                    this._millisecond[i] = Convert.ToInt32(time.Substring(0, 2));
+                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 2));
                     break;
                 case 1:
-                    this._millisecond[i] = Convert.ToInt32(time.Substring(0, 1));
+                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 1));
                     break;
             }
 
@@ -96,7 +112,7 @@ public class Record : MonoBehaviour, ILoad
             this._country[i] = data.name[i].Substring(0, 3).ToUpper();
             this._flag[i] = FindFlag(_country[i]);
 
-            Debug.Log($"Load Data #{i}: {_name[i]} - {time[i]}");
+            Debug.Log($"Load Data #{i}: {_name[i]} - {_wholeTime[i]}");
             
             CreateLeaderboard();
         }
