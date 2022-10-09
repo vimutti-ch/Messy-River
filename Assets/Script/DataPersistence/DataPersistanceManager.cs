@@ -7,6 +7,7 @@ public class DataPersistanceManager : MonoBehaviour
 {
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
+    [SerializeField] private bool useTryCatch;
 
     private GameData _gameData;
     private SimplifyGameData _simplifyGameData;
@@ -52,14 +53,19 @@ public class DataPersistanceManager : MonoBehaviour
         this._gameData = _dataHandler.Load();
         Debug.Log("File Load Done");
 
-        // try
-        // {
+        if(useTryCatch)
+        try
+        {
             playfabManager.GetLeaderboard();
-        // }
-        // catch (Exception e)
-        // {
-        //     Console.WriteLine(e);
-        // }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        else
+        {
+            playfabManager.GetLeaderboard();
+        }
         
         Debug.Log("Get Leaderboard done");
 
