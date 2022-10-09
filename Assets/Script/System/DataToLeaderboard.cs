@@ -8,6 +8,7 @@ public class DataToLeaderboard : MonoBehaviour
     public static DataToLeaderboard Instance;
 
     public TMP_Text[] leaderText;
+    public TMP_Text[] globalLeaderText;
 
     private void Awake()
     {
@@ -29,6 +30,16 @@ public class DataToLeaderboard : MonoBehaviour
             if(Record.Instance.Name[i] == null) return;
             
             leaderText[i].text = $"Rank {i+1} {Record.Instance.WholeTime[i]} {Record.Instance.Name[i]}";
+        }
+    }
+    
+    public void UpdateGlobalLeaderBoard()
+    {
+        for (int i = 0; i < Record.Instance.NameGlobal.Length; i++)
+        {
+            if(Record.Instance.NameGlobal[i] == null) return;
+            
+            globalLeaderText[i].text = $"Rank {i+1} {Record.Instance.WholeTimeGlobal[i]} {Record.Instance.NameGlobal[i]}";
         }
     }
 }
