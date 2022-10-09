@@ -38,10 +38,20 @@ public class PlayfabManager : MonoBehaviour
 
     void OnLeaderboardGet(GetLeaderboardResult result)
     {
-        foreach (var item in result.Leaderboard)
+        // foreach (var item in result.Leaderboard)
+        // {
+        //     Debug.LogWarning("Work");
+        //     Debug.Log(item.Position + " " + item.DisplayName + " " + item.StatValue);
+        //     //Debug.Log($"{item.Position} {item.PlayFabId} {item.StatValue}");
+        // }
+
+        Record.Instance.CreateGlobalRecord(result.Leaderboard.Count);
+        
+        for (int i = 0; i < result.Leaderboard.Count; i++)
         {
-            Debug.Log(item.Position + " " + item.PlayFabId + " " + item.StatValue);
-            //Debug.Log($"{item.Position} {item.PlayFabId} {item.StatValue}");
+            var item = result.Leaderboard[i];
+            
+            Record.Instance.GlobalRecordSetter(item.Position, item.DisplayName, item.StatValue);
         }
     }
 
@@ -83,5 +93,7 @@ public class PlayfabManager : MonoBehaviour
             MaxResultsCount = 5
         };
         PlayFabClientAPI.GetLeaderboard(request, OnLeaderboardGet, OnError);
+        
+        Debug.Log("Get Leaderboard Complete");
     }
 }

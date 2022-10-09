@@ -22,7 +22,7 @@ public class DataToLeaderboard : MonoBehaviour
         }
     }
     
-    public void UpdateLeaderBoard()
+    public void UpdateLocalLeaderBoard()
     {
         for (int i = 0; i < Record.Instance.Name.Length; i++)
         {

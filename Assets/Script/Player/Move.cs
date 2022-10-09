@@ -27,6 +27,9 @@ public class Move : MonoBehaviour
     
     [Space(10)]
     public LayerMask treeLayers;
+
+    [Header("Debug")]
+    public bool showBelow;
     
     //Back-end Variable
     private PlayerControl _controller;
@@ -124,7 +127,7 @@ public class Move : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, distance))
         {
-            Debug.Log($"Below is {hit.transform.tag}");
+            if(showBelow) Debug.Log($"Below is {hit.transform.tag}");
             switch (hit.transform.tag)
             {
                 case "Water":
@@ -135,12 +138,7 @@ public class Move : MonoBehaviour
                     enabled = false;
                     break;
                 case "Finish":
-                    timer.PassResult();
-                    timer.SetStatus(false);
-                    _controllable = false;
-                    inputName.SetActive(true);
-                    animator.SetBool("open", true);
-                    _isEnd = true;
+                    Finish();
                     break;
                 case "Crocohead":
                 case "Crocotail":
@@ -302,6 +300,17 @@ public class Move : MonoBehaviour
     void ToEndLine()
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, 4);
+    }
+
+    [ContextMenu("Finish")]
+    void Finish()
+    {
+        timer.PassResult();
+        timer.SetStatus(false);
+        _controllable = false;
+        inputName.SetActive(true);
+        animator.SetBool("open", true);
+        _isEnd = true;
     }
 
     #endregion

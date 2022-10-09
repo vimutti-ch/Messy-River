@@ -52,14 +52,14 @@ public class DataPersistanceManager : MonoBehaviour
         this._gameData = _dataHandler.Load();
         Debug.Log("File Load Done");
 
-        try
-        {
+        // try
+        // {
             playfabManager.GetLeaderboard();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        // }
+        // catch (Exception e)
+        // {
+        //     Console.WriteLine(e);
+        // }
         
         Debug.Log("Get Leaderboard done");
 

@@ -39,6 +39,22 @@ public class Record : MonoBehaviour, ILoad
     public Sprite[] Flag => _flag;
     public string[] WholeTime => _wholeTime;
 
+    private int[] _minuteGlobal;
+    private int[] _secondGlobal;
+    private int[] _millisecondGlobal;
+    private string[] _nameGlobal;
+    private string[] _countryGlobal;
+    private Sprite[] _flagGlobal;
+    private string[] _wholeTimeGlobal;
+    
+    public int[] MinuteGlobal => _minuteGlobal;
+    public int[] SecondGlobal => _secondGlobal;
+    public int[] MillisecondGlobal => _millisecondGlobal;
+    public string[] NameGlobal => _nameGlobal;
+    public string[] CountryGlobal => _countryGlobal;
+    public Sprite[] FlagGlobal => _flagGlobal;
+    public string[] WholeTimeGlobal => _wholeTimeGlobal;
+    
     public static Record Instance;
     
     #endregion
@@ -80,33 +96,7 @@ public class Record : MonoBehaviour, ILoad
 
             _wholeTime[i] = data.time[i].ToString();
 
-            switch (_wholeTime[i].Length)
-            {
-                case 6:
-                    this._minute[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 2));
-                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(2, 2));
-                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(4, 2));
-                    break;
-                case 5:
-                    this._minute[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 1));
-                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(1, 2));
-                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(3, 2));
-                    break;
-                case 4:
-                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 2));
-                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(2, 2));
-                    break;
-                case 3:
-                    this._second[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 1));
-                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(1, 2));
-                    break;
-                case 2:
-                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 2));
-                    break;
-                case 1:
-                    this._millisecond[i] = Convert.ToInt32(_wholeTime[i].Substring(0, 1));
-                    break;
-            }
+            TimeFormatter(_wholeTime[i], out _minute[i], out _second[i], out _millisecond[i]);
 
             this._name[i] = data.name[i].Substring(3);
             this._country[i] = data.name[i].Substring(0, 3).ToUpper();
@@ -117,7 +107,66 @@ public class Record : MonoBehaviour, ILoad
             CreateLeaderboard();
         }
     }
+
+    public void CreateGlobalRecord(int dataQuantity)
+    {
+        _minuteGlobal = new int[dataQuantity];
+        _secondGlobal = new int[dataQuantity];
+        _millisecondGlobal = new int[dataQuantity];
+        _nameGlobal = new string[dataQuantity];
+        _countryGlobal = new string[dataQuantity];
+        _flagGlobal = new Sprite[dataQuantity];
+        _wholeTimeGlobal = new string[dataQuantity];
+    }
     
+    public void GlobalRecordSetter(int index, string name, int time)
+    {
+        _wholeTimeGlobal[index] = time.ToString();
+
+            TimeFormatter(_wholeTimeGlobal[index], out _minuteGlobal[index], out _secondGlobal[index], out _millisecondGlobal[index]);
+
+            this._nameGlobal[index] = name.Substring(3);
+            this._countryGlobal[index] = name.Substring(0, 3).ToUpper();
+            this._flagGlobal[index] = FindFlag(_countryGlobal[index]);
+
+        Debug.Log($"Create Global Data #{index}: {_nameGlobal[index]} - {_wholeTimeGlobal[index]}");
+    }
+
+    public void TimeFormatter(string time, out int minute, out int second, out int millisecond)
+    {
+        minute = 0;
+        second = 0;
+        millisecond = 0;
+        
+        switch (time.Length)
+        {
+            case 6:
+                 minute = Convert.ToInt32(time.Substring(0, 2));
+                 second = Convert.ToInt32(time.Substring(2, 2));
+                 millisecond = Convert.ToInt32(time.Substring(4, 2));
+                break;
+            case 5:
+                 minute = Convert.ToInt32(time.Substring(0, 1));
+                 second = Convert.ToInt32(time.Substring(1, 2));
+                 millisecond = Convert.ToInt32(time.Substring(3, 2));
+                break;
+            case 4:
+                 second = Convert.ToInt32(time.Substring(0, 2));
+                 millisecond = Convert.ToInt32(time.Substring(2, 2));
+                break;
+            case 3:
+                 second = Convert.ToInt32(time.Substring(0, 1));
+                 millisecond = Convert.ToInt32(time.Substring(1, 2));
+                break;
+            case 2:
+                 millisecond = Convert.ToInt32(time.Substring(0, 2));
+                break;
+            case 1:
+                 millisecond = Convert.ToInt32(time.Substring(0, 1));
+                break;
+        }
+    }
+
     private void CreateLeaderboard()
     {
         Debug.Log("Start Create Leaderboard");
