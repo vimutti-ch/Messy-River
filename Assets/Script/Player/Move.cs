@@ -131,11 +131,7 @@ public class Move : MonoBehaviour
             switch (hit.transform.tag)
             {
                 case "Water":
-                    waterParticle.Play();
-                    GetComponent<BoxCollider>().enabled = false;
-                    GetComponent<Drown>().Restart();
-                    Detach();
-                    enabled = false;
+                    GroundDrown();
                     break;
                 case "Finish":
                     Finish();
@@ -150,6 +146,15 @@ public class Move : MonoBehaviour
         }
 
         Debug.DrawRay(transform.position, Vector3.down * distance, Color.red);
+    }
+
+    public void GroundDrown()
+    {
+        waterParticle.Play();
+        GetComponent<BoxCollider>().enabled = false;
+        GetComponent<Drown>().Restart();
+        Detach();
+        enabled = false;
     }
 
     // public void saveRecord()
