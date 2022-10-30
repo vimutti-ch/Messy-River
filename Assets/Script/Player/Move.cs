@@ -11,8 +11,7 @@ public class Move : MonoBehaviour
     public float distance;
     public float blockScale = 1f;
     public float force;
-    public float deadZone;
-    
+
     [Header("Object Assign")]
     [FormerlySerializedAs("particle")]
     public ParticleSystem waterParticle;
@@ -38,7 +37,6 @@ public class Move : MonoBehaviour
     
     private Rigidbody _rigidbody;
     
-    private Vector2 _startPos, _endPos;
     private Vector3 _originalScale;
 
     private bool _isEnd = false;
@@ -232,7 +230,7 @@ public class Move : MonoBehaviour
     //     }
     // }
 
-    private void Forward()
+    public void Forward()
     {
         jumpAnimation.JumpAnim();
         Detach();
@@ -243,7 +241,7 @@ public class Move : MonoBehaviour
         PlayOn();
     }
 
-    private void Left()
+    public void Left()
     {
         jumpAnimation.JumpAnim();
         transform.rotation = Quaternion.Euler(-90, -90, -90);
@@ -253,7 +251,7 @@ public class Move : MonoBehaviour
         PlayOn();
     }
 
-    private void Back()
+    public void Back()
     {
         jumpAnimation.JumpAnim();
         Detach();
@@ -264,7 +262,7 @@ public class Move : MonoBehaviour
         PlayOn();
     }
 
-    private void Right()
+    public void Right()
     {
         jumpAnimation.JumpAnim();
         transform.rotation = Quaternion.Euler(-90, -90, 90);

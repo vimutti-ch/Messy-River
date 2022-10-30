@@ -30,6 +30,7 @@ public class StartGame : MonoBehaviour
         _controller.Move.Backward.performed += ctx => StartPlay();
         _controller.Move.Left.performed += ctx => StartPlay();
         _controller.Move.Right.performed += ctx => StartPlay();
+        _controller.Touch.PrimaryContract.performed += ctx => StartPlay();
     }
 
     private void StartPlay()

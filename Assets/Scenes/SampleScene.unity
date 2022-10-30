@@ -2779,6 +2779,67 @@ MonoBehaviour:
   invert: 1
   speedMin: 2
   speedMax: 3.5
+--- !u!1 &441052950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 441052951}
+  - component: {fileID: 441052953}
+  - component: {fileID: 441052952}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &441052951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441052950}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 522793357}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &441052952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441052950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf1dd753a33bcd46a5efc937e853931, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 482817473}
+  minimumDistance: 0.2
+  maximumTime: 1
+  directionThreshold: 0.9
+--- !u!114 &441052953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441052950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e32d9454ef88a4f87b0c53c594dc71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &447355928
 GameObject:
   m_ObjectHideFlags: 0
@@ -2966,7 +3027,6 @@ MonoBehaviour:
   distance: 100
   blockScale: 1
   force: 100
-  deadZone: 100
   waterParticle: {fileID: 1941565686}
   jumpAnimation: {fileID: 1860645221}
   timer: {fileID: 1081209374}
@@ -3143,6 +3203,7 @@ Transform:
   - {fileID: 437515055}
   - {fileID: 1601402970}
   - {fileID: 1101805493}
+  - {fileID: 441052951}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6367,7 +6428,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 23.399994, y: -3.300003}
+  m_AnchoredPosition: {x: 23.399994, y: -3.2999878}
   m_SizeDelta: {x: 20.411, y: 15.526}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1070574086
@@ -9219,7 +9280,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2edb2291b4a626468750b6fe1d33df6, type: 2}
+  - {fileID: 2100000, guid: 839396c0a9dc04045b8fc71c8d71437f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10012,7 +10073,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2edb2291b4a626468750b6fe1d33df6, type: 2}
+  - {fileID: 2100000, guid: 839396c0a9dc04045b8fc71c8d71437f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
