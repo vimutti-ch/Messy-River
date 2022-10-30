@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class SwipeDetection : MonoBehaviour
 {
+    public static SwipeDetection Instance;
+    
     [SerializeField] private Move player;
     [SerializeField] private float minimumDistance = .2f;
     [SerializeField] private float maximumTime = 1f;
     [SerializeField, Range(0f, 1f)] private float directionThreshold = .9f;
+    [SerializeField] private bool isEnable = true;
     
     private InputManager _inputManager;
 
@@ -20,6 +23,16 @@ public class SwipeDetection : MonoBehaviour
     
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
         _inputManager = InputManager.Instance;
     }
 
@@ -69,6 +82,8 @@ public class SwipeDetection : MonoBehaviour
 
     private void SwipeDirection(Vector2 direction)
     {
+        if(!isEnable) return;
+        
         Debug.Log($"in Case of Up {Vector2.Dot(Vector2.up, direction)}");
         Debug.Log($"in Case of Down {Vector2.Dot(Vector2.down, direction)}");
         Debug.Log($"in Case of Left {Vector2.Dot(Vector2.left, direction)}");
@@ -94,5 +109,10 @@ public class SwipeDetection : MonoBehaviour
             Debug.Log("Swipe Right");
             player.Right();
         }
+    }
+
+    public void Enable(bool status)
+    {
+        isEnable = status;
     }
 }

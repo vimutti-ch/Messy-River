@@ -103,6 +103,7 @@ public class Move : MonoBehaviour
     private void DisableControl()
     {
         _controller.Disable();
+        SwipeDetection.Instance.Enable(false);
     }
 
     private void Attach(Transform obj)

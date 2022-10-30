@@ -30,6 +30,7 @@ public class Record : MonoBehaviour, ILoad
     private string[] _country;
     private Sprite[] _flag;
     private string[] _wholeTime;
+    private string[] _displayTime;
     
     public int[] Minute => _minute;
     public int[] Second => _second;
@@ -38,6 +39,7 @@ public class Record : MonoBehaviour, ILoad
     public string[] Country => _country;
     public Sprite[] Flag => _flag;
     public string[] WholeTime => _wholeTime;
+    public string[] DisplayTime => _displayTime;
 
     private int[] _minuteGlobal;
     private int[] _secondGlobal;
@@ -46,6 +48,7 @@ public class Record : MonoBehaviour, ILoad
     private string[] _countryGlobal;
     private Sprite[] _flagGlobal;
     private string[] _wholeTimeGlobal;
+    private string[] _displayTimeGlobal;
     
     public int[] MinuteGlobal => _minuteGlobal;
     public int[] SecondGlobal => _secondGlobal;
@@ -54,6 +57,7 @@ public class Record : MonoBehaviour, ILoad
     public string[] CountryGlobal => _countryGlobal;
     public Sprite[] FlagGlobal => _flagGlobal;
     public string[] WholeTimeGlobal => _wholeTimeGlobal;
+    public string[] DisplayTimeGlobal => _displayTimeGlobal;
     
     public static Record Instance;
     
@@ -89,6 +93,7 @@ public class Record : MonoBehaviour, ILoad
         _country = new string[dataQuantity];
         _flag = new Sprite[dataQuantity];
         _wholeTime = new string[dataQuantity];
+        _displayTime = new string[dataQuantity];
 
         for (int i = 0; i < dataQuantity; i++)
         {
@@ -97,6 +102,7 @@ public class Record : MonoBehaviour, ILoad
             _wholeTime[i] = data.time[i].ToString();
 
             TimeFormatter(_wholeTime[i], out _minute[i], out _second[i], out _millisecond[i]);
+            _displayTime[i] = TimeDisplayFormatter(_minute[i], _second[i], _millisecond[i], _name[i]);
 
             this._name[i] = data.name[i].Substring(3);
             this._country[i] = data.name[i].Substring(0, 3).ToUpper();
@@ -117,6 +123,7 @@ public class Record : MonoBehaviour, ILoad
         _countryGlobal = new string[dataQuantity];
         _flagGlobal = new Sprite[dataQuantity];
         _wholeTimeGlobal = new string[dataQuantity];
+        _displayTimeGlobal = new string[dataQuantity];
     }
     
     public void GlobalRecordSetter(int index, string name, int time)
@@ -124,6 +131,7 @@ public class Record : MonoBehaviour, ILoad
         _wholeTimeGlobal[index] = time.ToString();
 
             TimeFormatter(_wholeTimeGlobal[index], out _minuteGlobal[index], out _secondGlobal[index], out _millisecondGlobal[index]);
+            _displayTimeGlobal[index] = TimeDisplayFormatter(_minuteGlobal[index], _secondGlobal[index], _millisecondGlobal[index], _nameGlobal[index]);
 
             this._nameGlobal[index] = name.Substring(3);
             this._countryGlobal[index] = name.Substring(0, 3).ToUpper();
@@ -218,6 +226,11 @@ public class Record : MonoBehaviour, ILoad
         }
 
         return null;
+    }
+
+    private string TimeDisplayFormatter(int minute, int second, int milliseccond, string name)
+    {
+        return $"{minute.ToString("00")}:{second.ToString("00")}:{milliseccond.ToString("00")} - {name}\n";
     }
 
     #endregion
