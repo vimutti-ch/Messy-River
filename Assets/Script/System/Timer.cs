@@ -6,7 +6,12 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour, ISave
 {
+    public static Timer Instance;
+    
     public string TimeRecord => timerText;
+
+    public int PlayerTime => _playerTime;
+    public string PlayerName => _playerName;
     
     [Header("Object Assign")]
     [FormerlySerializedAs("name")] public TMP_InputField username;
@@ -25,6 +30,22 @@ public class Timer : MonoBehaviour, ISave
     private float _timer;
     private TMP_Text _timeText;
     private int _minute;
+
+    private int _playerTime;
+    private string _playerName;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        }
+        else
+        {
+            Destroy(Instance);
+        }
+    }
 
     void Start()
     {

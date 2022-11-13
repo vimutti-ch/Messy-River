@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +10,11 @@ public class DataToLeaderboard : MonoBehaviour
 
     public TMP_Text[] leaderText;
     public TMP_Text[] globalLeaderText;
+
+    public TMP_Text playerLocal;
+    public TMP_Text playerGlobal;
+
+    private Timer timer;
 
     private void Awake()
     {
@@ -22,7 +28,12 @@ public class DataToLeaderboard : MonoBehaviour
             Destroy(Instance);
         }
     }
-    
+
+    private void Start()
+    {
+        timer = Timer.Instance;
+    }
+
     public void UpdateLocalLeaderBoard()
     {
         for (int i = 0; i < Record.Instance.Name.Length; i++)
@@ -31,6 +42,10 @@ public class DataToLeaderboard : MonoBehaviour
             
             leaderText[i].text = $"Rank {i+1} {Record.Instance.DisplayTime[i]} {Record.Instance.Name[i]}";
         }
+
+        string playerStatistics = $"Your time: {timer.PlayerTime} {timer.PlayerName}";
+        
+        playerLocal.text = playerStatistics;
     }
     
     public void UpdateGlobalLeaderBoard()
@@ -41,5 +56,9 @@ public class DataToLeaderboard : MonoBehaviour
             
             globalLeaderText[i].text = $"Rank {i+1} {Record.Instance.DisplayTimeGlobal[i]} {Record.Instance.NameGlobal[i]}";
         }
+        
+        string playerStatistics = $"Your time: {timer.PlayerTime} {timer.PlayerName}";
+        
+        playerLocal.text = playerStatistics;
     }
 }

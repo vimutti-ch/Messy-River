@@ -82,7 +82,7 @@ public class Move : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        GetComponent<Drown>().Restart();
+        GetComponent<Drown>().InstantRestart();
     }
     
     private void OnCollisionEnter(Collision colide)

@@ -53,6 +53,8 @@ public class PlayfabManager : MonoBehaviour
             
             Record.Instance.GlobalRecordSetter(item.Position, item.DisplayName, item.StatValue);
         }
+        
+        Record.Instance.CreateGlobalLeaderboard();
     }
 
     void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)

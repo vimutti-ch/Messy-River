@@ -44,5 +44,10 @@ public class Drown : MonoBehaviour
         _restart.ResetGame();
     }
 
+    public void InstantRestart()
+    {
+        _restart.ResetGame();
+    }
+
     #endregion
 }

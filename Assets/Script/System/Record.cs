@@ -6,13 +6,16 @@ public class Record : MonoBehaviour, ILoad
     #region - Variable Declaration (การประกาศตัวแปร) -
 
     [Header("Attributes")]
-    public float x;
-    public float y;
-    public float size;
+    [HideInInspector] public float x = 350f;
+    [HideInInspector] public float y = 105f;
+    public float size = 0.8f;
 
-    public float space;
+    [HideInInspector] public float space = 30f;
 
-    public int recordLimiter;
+    public Transform local;
+    public Transform global;
+    
+    [Range(1, 5)] public int recordLimiter = 1;
 
     [Header("Object Assign")]
     //public static RecordInfo[] infos = new RecordInfo[1];
@@ -109,9 +112,9 @@ public class Record : MonoBehaviour, ILoad
             this._flag[i] = FindFlag(_country[i]);
 
             Debug.Log($"Load Data #{i}: {_name[i]} - {_wholeTime[i]}");
-            
-            CreateLeaderboard();
         }
+        
+        CreateLocalLeaderboard();
     }
 
     public void CreateGlobalRecord(int dataQuantity)
@@ -175,18 +178,22 @@ public class Record : MonoBehaviour, ILoad
         }
     }
 
-    private void CreateLeaderboard()
+    private void CreateLocalLeaderboard()
     {
         Debug.Log("Start Create Leaderboard");
         
         prRect = puRect;
         y = prRect.localPosition.y - space;
 
-        string[] word = new string[recordLimiter];
+        string[] timeFormatted = new string[recordLimiter];
+
+        Debug.LogWarning($"Limiter is {recordLimiter}");
         
         Debug.Log("Before loop");
         for (int i = 0; i < recordLimiter; i++)
         {
+            Debug.LogWarning("Created Leaderboard");
+            
             Debug.Log("Enter Loop");
             if (_name[i] == null)
             {
@@ -194,20 +201,68 @@ public class Record : MonoBehaviour, ILoad
                 return;
             }
             
-            word[i] =
-                $"{this._minute[i].ToString("00")}:{this._second[i].ToString("00")}:{this._millisecond[i].ToString("00")} - {this._name[i]}\n";
+            timeFormatted[i] =
+                $"{this._minute[i].ToString("00")}:{this._second[i].ToString("00")}:{this._millisecond[i].ToString("00")}";
 
             var obj = Instantiate(recordText, Vector2.zero, Quaternion.identity);
             obj.transform.SetParent(this.transform);
+            obj.transform.SetSiblingIndex(local.GetSiblingIndex() + 1);
+            
             RectTransform rect = obj.GetComponent<RectTransform>();
-            rect.localPosition = new Vector3(puRect.localPosition.x, y, 0);
+            //rect.localPosition = new Vector3(puRect.localPosition.x, y, 0);
             rect.localScale = new Vector3(size, size, size);
 
             RecordLine line = obj.GetComponent<RecordLine>();
 
-            line.SetRecord(word[i], this._flag[i]);
+            line.SetRecord(timeFormatted[i], this._flag[i],  this._name[i]);
 
-            y = y - space;
+            //y = y - space;
+            
+            Debug.Log("Leaderboard Created");
+        }
+        
+        Debug.Log("Stop Create Leaderboard");
+    }
+    
+    public void CreateGlobalLeaderboard()
+    {
+        Debug.Log("Start Create Leaderboard");
+        
+        prRect = puRect;
+        y = prRect.localPosition.y - space;
+
+        string[] timeFormatted = new string[recordLimiter];
+        
+        Debug.LogWarning($"Limiter is {recordLimiter}");
+        
+        Debug.Log("Before loop");
+        for (int i = 0; i < recordLimiter; i++)
+        {
+            Debug.LogWarning("Created Leaderboard");
+            
+            Debug.Log("Enter Loop");
+            if (_name[i] == null)
+            {
+                Debug.Log("Return");
+                return;
+            }
+            
+            timeFormatted[i] =
+                $"{this._minuteGlobal[i].ToString("00")}:{this._secondGlobal[i].ToString("00")}:{this._millisecondGlobal[i].ToString("00")}";
+
+            var obj = Instantiate(recordText, Vector2.zero, Quaternion.identity);
+            obj.transform.SetParent(this.transform);
+            obj.transform.SetSiblingIndex(global.GetSiblingIndex() + 1);
+            
+            RectTransform rect = obj.GetComponent<RectTransform>();
+            //rect.localPosition = new Vector3(puRect.localPosition.x, y, 0);
+            rect.localScale = new Vector3(size, size, size);
+
+            RecordLine line = obj.GetComponent<RecordLine>();
+
+            line.SetRecord(timeFormatted[i], this._flag[i], this._nameGlobal[i]);
+
+            //y = y - space;
             
             Debug.Log("Leaderboard Created");
         }
@@ -228,7 +283,7 @@ public class Record : MonoBehaviour, ILoad
         return null;
     }
 
-    private string TimeDisplayFormatter(int minute, int second, int milliseccond, string name)
+    public static string TimeDisplayFormatter(int minute, int second, int milliseccond, string name)
     {
         return $"{minute.ToString("00")}:{second.ToString("00")}:{milliseccond.ToString("00")} - {name}\n";
     }

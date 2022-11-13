@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class RecordLine : MonoBehaviour
 {
-    [FormerlySerializedAs("name")] public TMP_Text displayName;
+    [FormerlySerializedAs("name")] public TMP_Text displayTime;
     public Image flag;
+    public TMP_Text displayName;
 
-    public void SetRecord(string word, Sprite picture)
+    public void SetRecord(string time, Sprite picture, string name)
     {
-        displayName.text = word;
+        displayTime.text = time;
         flag.sprite = picture;
+        displayName.text = name;
     }
 }
