@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 164.6816, y: 50}
+  m_SizeDelta: {x: 168.6756, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &6656487500652303959
 CanvasRenderer:
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Name
+  m_text: MMMMMMMM
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e6df3aa67404b8146a530a6498021c93, type: 2}
   m_sharedMaterial: {fileID: 7804147157428474122, guid: e6df3aa67404b8146a530a6498021c93, type: 2}
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -174,7 +174,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 323.0745, y: 50}
+  m_SizeDelta: {x: 318.2548, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &-5213464999924544543
 MonoBehaviour:
