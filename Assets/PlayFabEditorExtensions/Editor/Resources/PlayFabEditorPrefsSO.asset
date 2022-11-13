@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0199c11aa6f514784c5c69cd8378d8, type: 3}
   m_Name: PlayFabEditorPrefsSO
   m_EditorClassIdentifier: 
-  DevAccountEmail: katanastudio@outlook.co.th
-  DevAccountToken: zzs7icc63s4nsr8qr4kzcu3suchjkhk55arpjq58n6bk39bgep3nnsefxoyuko8emohc6yx6e8gg3n9fqb1auxddt11s3zef99qdo71gw8yztsujihzs51kma3di1q5ae8xigu94jgi7ja81kkjaf8pgjz1htaudy76nd7rb3bn6wchktfitxhmzngeg13bh3q3nruc6
-  SelectedStudio: Sarabun Studio
-  SdkPath: Assets/PlayFabSDK
+  DevAccountEmail: 
+  DevAccountToken: 
+  SelectedStudio: 
+  SdkPath: 
   EdExPath: 
   LocalCloudScriptPath: 
   PanelIsShown: 0

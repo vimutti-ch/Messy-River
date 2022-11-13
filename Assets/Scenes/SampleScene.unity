@@ -1537,13 +1537,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1070574085}
-  m_Father: {fileID: 1352549994}
+  m_Father: {fileID: 2136088584}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -883, y: -487}
-  m_SizeDelta: {x: -501.182, y: -278.669}
+  m_AnchoredPosition: {x: -592.89, y: -336.03546}
+  m_SizeDelta: {x: 88.83801, y: 61.613113}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &243225917
 MonoBehaviour:
@@ -1589,9 +1589,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 482817473}
-        m_TargetAssemblyTypeName: Move, Assembly-CSharp
-        m_MethodName: GroundDrown
+      - m_Target: {fileID: 1601402968}
+        m_TargetAssemblyTypeName: Drown, Assembly-CSharp
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6452,7 +6452,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Do not click
+  m_text: Restart
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8861,7 +8861,6 @@ RectTransform:
   - {fileID: 1247545070}
   - {fileID: 1570212478}
   - {fileID: 928593461}
-  - {fileID: 243225916}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: -49.347, z: 0}
@@ -18555,6 +18554,7 @@ RectTransform:
   - {fileID: 834103884}
   - {fileID: 1872986772}
   - {fileID: 1417253853}
+  - {fileID: 243225916}
   m_Father: {fileID: 1570212478}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
