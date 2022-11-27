@@ -40,7 +40,7 @@ public class DataToLeaderboard : MonoBehaviour
         {
             if(Record.Instance.Name[i] == null) return;
             
-            leaderText[i].text = $"Rank {i+1} {Record.Instance.DisplayTime[i]} {Record.Instance.Name[i]}";
+            leaderText[i].text = $"Rank {i+1} {Record.Instance.DisplayTime[i]} - {Record.Instance.Name[i]}";
         }
 
         string playerStatistics = $"Your time: {timer.PlayerTime} {timer.PlayerName}";
@@ -54,7 +54,7 @@ public class DataToLeaderboard : MonoBehaviour
         {
             if(Record.Instance.NameGlobal[i] == null) return;
             
-            globalLeaderText[i].text = $"Rank {i+1} {Record.Instance.DisplayTimeGlobal[i]} {Record.Instance.NameGlobal[i]}";
+            globalLeaderText[i].text = $"Rank {i+1} {Record.Instance.DisplayTimeGlobal[i]} - {Record.Instance.NameGlobal[i]}";
         }
         
         string playerStatistics = $"Your time: {timer.PlayerTime} {timer.PlayerName}";
