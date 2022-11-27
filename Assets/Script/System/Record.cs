@@ -105,7 +105,7 @@ public class Record : MonoBehaviour, ILoad
             _wholeTime[i] = data.time[i].ToString();
 
             TimeFormatter(_wholeTime[i], out _minute[i], out _second[i], out _millisecond[i]);
-            _displayTime[i] = TimeDisplayFormatter(_minute[i], _second[i], _millisecond[i], _name[i]);
+            _displayTime[i] = TimeDisplayFormatter(_minute[i], _second[i], _millisecond[i]);
 
             this._name[i] = data.name[i].Substring(3);
             this._country[i] = data.name[i].Substring(0, 3).ToUpper();
@@ -134,7 +134,7 @@ public class Record : MonoBehaviour, ILoad
         _wholeTimeGlobal[index] = time.ToString();
 
             TimeFormatter(_wholeTimeGlobal[index], out _minuteGlobal[index], out _secondGlobal[index], out _millisecondGlobal[index]);
-            _displayTimeGlobal[index] = TimeDisplayFormatter(_minuteGlobal[index], _secondGlobal[index], _millisecondGlobal[index], _nameGlobal[index]);
+            _displayTimeGlobal[index] = TimeDisplayFormatter(_minuteGlobal[index], _secondGlobal[index], _millisecondGlobal[index]);
 
             this._nameGlobal[index] = name.Substring(3);
             this._countryGlobal[index] = name.Substring(0, 3).ToUpper();
@@ -283,9 +283,9 @@ public class Record : MonoBehaviour, ILoad
         return null;
     }
 
-    public static string TimeDisplayFormatter(int minute, int second, int milliseccond, string name)
+    public static string TimeDisplayFormatter(int minute, int second, int milliseccond)
     {
-        return $"{minute.ToString("00")}:{second.ToString("00")}:{milliseccond.ToString("00")} - {name}\n";
+        return $"{minute.ToString("00")}:{second.ToString("00")}:{milliseccond.ToString("00")}";
     }
 
     #endregion
