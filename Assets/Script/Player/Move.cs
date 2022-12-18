@@ -130,6 +130,7 @@ public class Move : MonoBehaviour
             switch (hit.transform.tag)
             {
                 case "Water":
+                    _controllable = false;
                     GroundDrown();
                     break;
                 case "Finish":
@@ -137,6 +138,7 @@ public class Move : MonoBehaviour
                     break;
                 case "Crocohead":
                 case "Crocotail":
+                    _controllable = false;
                     Detach();
                     _rigidbody.AddForce(new Vector3(0, force, 0));
                     GetComponent<Drown>().Restart();
@@ -233,6 +235,7 @@ public class Move : MonoBehaviour
 
     public void Forward()
     {
+        if (!_controllable) return;
         jumpAnimation.JumpAnim();
         Detach();
         transform.rotation = Quaternion.Euler(-90, -90, 0);
@@ -244,6 +247,7 @@ public class Move : MonoBehaviour
 
     public void Left()
     {
+        if (!_controllable) return;
         jumpAnimation.JumpAnim();
         transform.rotation = Quaternion.Euler(-90, -90, -90);
 
@@ -254,6 +258,7 @@ public class Move : MonoBehaviour
 
     public void Back()
     {
+        if (!_controllable) return;
         jumpAnimation.JumpAnim();
         Detach();
         transform.rotation = Quaternion.Euler(-90, -90, 180);
@@ -265,6 +270,7 @@ public class Move : MonoBehaviour
 
     public void Right()
     {
+        if (!_controllable) return;
         jumpAnimation.JumpAnim();
         transform.rotation = Quaternion.Euler(-90, -90, 90);
 
