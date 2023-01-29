@@ -319,7 +319,8 @@ public class Move : MonoBehaviour
         timer.SetStatus(false);
         _controllable = false;
         inputName.SetActive(true);
-        animator.SetBool("open", true);
+        ResultController.instant.movein();
+        //animator.SetBool("open", true);
         _isEnd = true;
     }
 
