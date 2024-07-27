@@ -12,6 +12,7 @@ public class DataPersistanceManager : MonoBehaviour
     [SerializeField] private int maxDataSize = 5; 
     
     private GameData[] _gameDatas;
+    private GameData[] _globalGameDatas;
     private GameData _currentRunData;
     private List<ILoad> _dataLoads; //ตัวเก็บ Obj ทุก ๆ ชิ้นที่มีการใช้งาน IDataPersistance
     private List<ISave> _dataSaves; //ตัวเก็บ Obj ทุก ๆ ชิ้นที่มีการใช้งาน IDataPersistance
@@ -32,6 +33,7 @@ public class DataPersistanceManager : MonoBehaviour
 
         Instance = this;
         _gameDatas = new GameData[maxDataSize];
+        _globalGameDatas = new GameData[maxDataSize];
         _currentRunData = new GameData();
     }
 
@@ -53,52 +55,54 @@ public class DataPersistanceManager : MonoBehaviour
     public void LoadGame()
     {
         Debug.Log("Initialize Load Data");
+        
+        #region Load Local Data
         // load any saved data from a file using the data handler
         this._gameDatas = _dataHandler.Load();
-        Debug.Log("File Load Done");
+        if (_gameDatas != null)
+        {
+            Debug.Log("File Load Done");
 
-        // if(useTryCatch)
-        // try
-        // {
-        //     // playfabManager.GetLeaderboard();
-        // }
-        // catch (Exception e)
-        // {
-        //     Console.WriteLine(e);
-        // }
-        // else
-        // {
-        //     // playfabManager.GetLeaderboard();
-        // }
+            foreach (ILoad dataPersistanceObj in _dataLoads)
+            {
+                dataPersistanceObj.LoadData(_gameDatas);
+            }
+            Debug.Log("Local data loaded");
+        }
         
+        // if no data can be Loaded, initialize to a new game
+        else //(this._gameDatas == null)
+        {
+            Debug.Log("No data was found. Initializing data to defaults.");
+            NewGame();
+        }
+        #endregion
+        
+        #region Load Global Data
         Leaderboards.test.GetEntries(entries =>
         {
-            int length = Mathf.Min(_gameDatas.Length, entries.Length);
-            this._gameDatas = new GameData[length];
+            int length = Mathf.Min(_globalGameDatas.Length, entries.Length);
+            this._globalGameDatas = new GameData[length];
             
             for (int i = 0; i < length; i++)
             {
-                _gameDatas[i] = new GameData();
-                _gameDatas[i].name = entries[i].Username;
-                _gameDatas[i].time = entries[i].Score;
+                _globalGameDatas[i] = new GameData();
+                _globalGameDatas[i].name = entries[i].Username;
+                _globalGameDatas[i].time = entries[i].Score;
             }
             
-            // if no data can be Loaded, initialize to a new game
-            if (this._gameDatas == null)
-            {
-                Debug.Log("No data was found. Initializing data to defaults.");
-                NewGame();
-            }
+            if(_globalGameDatas == null) return;
 
             // push the loaded data to all other scripts that need it
             foreach (ILoad dataPersistanceObj in _dataLoads)
             {
-                dataPersistanceObj.LoadData(_gameDatas);
+                dataPersistanceObj.LoadDataGlobal(_globalGameDatas);
                 Debug.Log("Load Data");
             }
         
-            Debug.Log("Load Data Done");
+            Debug.Log("Global data loaded");
         });
+        #endregion
         
         Debug.Log("Exit Data load call");
     }
@@ -110,9 +114,11 @@ public class DataPersistanceManager : MonoBehaviour
         // pass the data to other scripts so they can update it
         foreach (ISave dataPersistanceObj in _dataSaves)
         {
-            dataPersistanceObj.SaveData(ref _gameDatas, ref _currentRunData);
+            dataPersistanceObj.SaveData(ref _gameDatas, out _currentRunData);
         }
 
+        if(_currentRunData.time < 0) return;
+        
         // save that data to a file using the data handler
         _dataHandler.Save(_gameDatas);
 
@@ -130,8 +136,6 @@ public class DataPersistanceManager : MonoBehaviour
 
         if (!uRnotFastest)
         {
-            //playfabManager.SendLeaderboard(_simplifyGameData);
-            
             Leaderboards.test.UploadNewEntry(_currentRunData.name, _currentRunData.time, isSuccessful =>
             {
                 if (isSuccessful)

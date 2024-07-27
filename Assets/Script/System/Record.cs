@@ -125,6 +125,38 @@ public class Record : MonoBehaviour, ILoad
         CreateLocalLeaderboard();
     }
 
+    public void LoadDataGlobal(GameData[] data)
+    {
+        datas = data;
+        
+        if(data.Length <= 0) return;
+        
+        int dataQuantity = data.Length;
+        Debug.Log("Data Quantity: " + dataQuantity);
+
+        CreateGlobalRecord(dataQuantity);
+
+        for (int i = 0; i < dataQuantity; i++)
+        {
+            Debug.Log(i);
+            if (data[i].time < 0) return;
+
+            GlobalRecordSetter(i, data[i].name, data[i].time);
+            // _wholeTimeGlobal[i] = data[i].time.ToString();
+            //
+            // TimeFormatter(_wholeTimeGlobal[i], out _minuteGlobal[i], out _secondGlobal[i], out _millisecondGlobal[i]);
+            // _displayTimeGlobal[i] = TimeDisplayFormatter(_minuteGlobal[i], _secondGlobal[i], _millisecondGlobal[i]);
+            //
+            // this._nameGlobal[i] = data[i].name.Substring(3);
+            // this._countryGlobal[i] = data[i].name.Substring(0, 3).ToUpper();
+            // this._flagGlobal[i] = FindFlag(_country[i]);
+
+            Debug.Log($"Load Data #{i}: {_nameGlobal[i]} - {_wholeTimeGlobal[i]}");
+        }
+        
+        CreateGlobalLeaderboard();
+    }
+
     public void CreateGlobalRecord(int dataQuantity)
     {
         _minuteGlobal = new int[dataQuantity];
@@ -193,12 +225,14 @@ public class Record : MonoBehaviour, ILoad
         prRect = puRect;
         y = prRect.localPosition.y - space;
 
-        string[] timeFormatted = new string[recordLimiter];
+        int actualLimit = Mathf.Min(recordLimiter, _name.Length);
+        
+        string[] timeFormatted = new string[actualLimit];
 
-        Debug.LogWarning($"Limiter is {recordLimiter}");
+        Debug.LogWarning($"Limiter is {actualLimit}");
         
         Debug.Log("Before loop");
-        for (int i = 0; i < recordLimiter; i++)
+        for (int i = 0; i < actualLimit; i++)
         {
             Debug.LogWarning("Created Leaderboard");
             
@@ -239,17 +273,19 @@ public class Record : MonoBehaviour, ILoad
         prRect = puRect;
         y = prRect.localPosition.y - space;
 
-        string[] timeFormatted = new string[recordLimiter];
+        int actualLimit = Mathf.Min(recordLimiter, _nameGlobal.Length);
         
-        Debug.LogWarning($"Limiter is {recordLimiter}");
+        string[] timeFormatted = new string[actualLimit];
+        
+        Debug.LogWarning($"Limiter is {actualLimit}");
         
         Debug.Log("Before loop");
-        for (int i = 0; i < recordLimiter; i++)
+        for (int i = 0; i < actualLimit; i++)
         {
             Debug.LogWarning("Created Leaderboard");
             
             Debug.Log("Enter Loop");
-            if (_name[i] == null)
+            if (_nameGlobal[i] == null)
             {
                 Debug.Log("Return");
                 return;
@@ -268,7 +304,7 @@ public class Record : MonoBehaviour, ILoad
 
             RecordLine line = obj.GetComponent<RecordLine>();
 
-            line.SetRecord(timeFormatted[i], this._flag[i], this._nameGlobal[i]);
+            line.SetRecord(timeFormatted[i], this._flagGlobal[i], this._nameGlobal[i]);
 
             //y = y - space;
             
