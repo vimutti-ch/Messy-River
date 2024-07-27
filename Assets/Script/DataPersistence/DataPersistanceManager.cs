@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using Dan.Main;
 
-public class DataPersistanceManager : MonoBehaviour
+public class DataPersistanceManager : Singleton<DataPersistanceManager>
 {
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
@@ -18,20 +18,12 @@ public class DataPersistanceManager : MonoBehaviour
     private List<ISave> _dataSaves; //ตัวเก็บ Obj ทุก ๆ ชิ้นที่มีการใช้งาน IDataPersistance
     private FileDataHandler _dataHandler;
 
-    public static DataPersistanceManager Instance { get; private set; }
-
     public GameData[] GameDatas => _gameDatas;
 
     private GameData[] _onlineDatas;
 
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Debug.LogError("Found more than one Data Persistance Manager in the scene.");
-        }
-
-        Instance = this;
         _gameDatas = new GameData[maxDataSize];
         _globalGameDatas = new GameData[maxDataSize];
         _currentRunData = new GameData();
@@ -63,9 +55,9 @@ public class DataPersistanceManager : MonoBehaviour
         {
             Debug.Log("File Load Done");
 
-            foreach (ILoad dataPersistanceObj in _dataLoads)
+            foreach (ILoad dataPersistenceObj in _dataLoads)
             {
-                dataPersistanceObj.LoadData(_gameDatas);
+                dataPersistenceObj.LoadData(_gameDatas);
             }
             Debug.Log("Local data loaded");
         }
@@ -84,6 +76,12 @@ public class DataPersistanceManager : MonoBehaviour
             int length = Mathf.Min(_globalGameDatas.Length, entries.Length);
             this._globalGameDatas = new GameData[length];
             
+            Debug.Log($"<color=#caf179ff> Global </color> Data Length : {length}");
+            if (length == 0)
+            {
+                Debug.LogWarning("No data was found. Skip loading Global Data");
+            }
+            
             for (int i = 0; i < length; i++)
             {
                 _globalGameDatas[i] = new GameData();
@@ -97,10 +95,10 @@ public class DataPersistanceManager : MonoBehaviour
             foreach (ILoad dataPersistanceObj in _dataLoads)
             {
                 dataPersistanceObj.LoadDataGlobal(_globalGameDatas);
-                Debug.Log("Load Data");
+                Debug.Log("Load<color=#caf179ff> Global </color>Data");
             }
         
-            Debug.Log("Global data loaded");
+            Debug.Log("<color=#caf179ff> Global </color> data loaded");
         });
         #endregion
         
@@ -114,7 +112,7 @@ public class DataPersistanceManager : MonoBehaviour
         // pass the data to other scripts so they can update it
         foreach (ISave dataPersistanceObj in _dataSaves)
         {
-            dataPersistanceObj.SaveData(ref _gameDatas, out _currentRunData);
+            dataPersistanceObj.SaveData(_gameDatas, out _gameDatas, out _currentRunData);
         }
 
         if(_currentRunData.time < 0) return;

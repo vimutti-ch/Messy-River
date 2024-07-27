@@ -93,8 +93,11 @@ public class Timer : MonoBehaviour, ISave
     //     return record;
     // }
 
-    public void SaveData(ref GameData[] data, ref GameData currentRun)
+    public void SaveData(GameData[] data,out GameData[] outputData, out GameData currentRun)
     {
+        currentRun = new GameData();
+        outputData = data;
+        
         saveUpdate = false;
         recordUpdated = false;
 
@@ -105,6 +108,7 @@ public class Timer : MonoBehaviour, ISave
         int wholeTime = Int32.Parse(_minute.ToString() + timerToInt.ToString()); // 00 00 00
         
         Debug.Log(wholeTime);
+        Debug.Log($"Data Length is {data.Length}");
 
         if (data.Length <= 0) return;
         
@@ -115,8 +119,9 @@ public class Timer : MonoBehaviour, ISave
         
         for (int i = 0; i < recordLimiter; i++)
         {
+            Debug.Log($"Start update {i} entry");
             Debug.Log(data[i].time + data[i].name);
-            if (tempTime < data[i].time || data[i].time == 0)
+            if (tempTime < data[i].time || data[i].time == -1)
             {
                 (data[i].time, tempTime) = (tempTime, data[i].time);
                 (data[i].name, tempName) = (tempName, data[i].name);
