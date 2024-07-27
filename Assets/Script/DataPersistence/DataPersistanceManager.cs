@@ -80,6 +80,7 @@ public class DataPersistanceManager : Singleton<DataPersistanceManager>
             if (length == 0)
             {
                 Debug.LogWarning("No data was found. Skip loading Global Data");
+                return;
             }
             
             for (int i = 0; i < length; i++)
