@@ -2,33 +2,31 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Dan.Main;
 
-public class DataPersistanceManager : MonoBehaviour
+public class DataPersistanceManager : Singleton<DataPersistanceManager>
 {
     [Header("File Storage Config")]
     [SerializeField] private string fileName;
     [SerializeField] private bool useTryCatch;
-
-    private GameData _gameData;
-    private SimplifyGameData _simplifyGameData;
+    [SerializeField] private int maxDataSize = 5; 
+    
+    private GameData[] _gameDatas;
+    private GameData[] _globalGameDatas;
+    private GameData _currentRunData;
     private List<ILoad> _dataLoads; //ตัวเก็บ Obj ทุก ๆ ชิ้นที่มีการใช้งาน IDataPersistance
     private List<ISave> _dataSaves; //ตัวเก็บ Obj ทุก ๆ ชิ้นที่มีการใช้งาน IDataPersistance
     private FileDataHandler _dataHandler;
 
-    public PlayfabManager playfabManager;
-    public static DataPersistanceManager Instance { get; private set; }
+    public GameData[] GameDatas => _gameDatas;
 
-    public GameData GameData => _gameData;
+    private GameData[] _onlineDatas;
 
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Debug.LogError("Found more than one Data Persistance Manager in the scene.");
-        }
-
-        Instance = this;
-        this._simplifyGameData = new SimplifyGameData();
+        _gameDatas = new GameData[maxDataSize];
+        _globalGameDatas = new GameData[maxDataSize];
+        _currentRunData = new GameData();
     }
 
     private void Start()
@@ -43,47 +41,69 @@ public class DataPersistanceManager : MonoBehaviour
 
     public void NewGame()
     {
-        this._gameData = new GameData();
+        this._gameDatas = new GameData[maxDataSize];
     }
 
     public void LoadGame()
     {
         Debug.Log("Initialize Load Data");
+        
+        #region Load Local Data
         // load any saved data from a file using the data handler
-        this._gameData = _dataHandler.Load();
-        Debug.Log("File Load Done");
+        this._gameDatas = _dataHandler.Load();
+        if (_gameDatas != null)
+        {
+            Debug.Log("File Load Done");
 
-        if(useTryCatch)
-        try
-        {
-            playfabManager.GetLeaderboard();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-        else
-        {
-            playfabManager.GetLeaderboard();
+            foreach (ILoad dataPersistenceObj in _dataLoads)
+            {
+                dataPersistenceObj.LoadData(_gameDatas);
+            }
+            Debug.Log("Local data loaded");
         }
         
-        Debug.Log("Get Leaderboard done");
-
         // if no data can be Loaded, initialize to a new game
-        if (this._gameData == null)
+        else //(this._gameDatas == null)
         {
             Debug.Log("No data was found. Initializing data to defaults.");
             NewGame();
         }
-
-        // push the loaded data to all other scripts that need it
-        foreach (ILoad dataPersistanceObj in _dataLoads)
-        {
-            dataPersistanceObj.LoadData(_gameData);
-            Debug.Log("Load Data");
-        }
+        #endregion
         
-        Debug.Log("Load Data Done");
+        #region Load Global Data
+        Leaderboards.test.GetEntries(entries =>
+        {
+            int length = Mathf.Min(_globalGameDatas.Length, entries.Length);
+            this._globalGameDatas = new GameData[length];
+            
+            Debug.Log($"<color=#caf179ff> Global </color> Data Length : {length}");
+            if (length == 0)
+            {
+                Debug.LogWarning("No data was found. Skip loading Global Data");
+                return;
+            }
+            
+            for (int i = 0; i < length; i++)
+            {
+                _globalGameDatas[i] = new GameData();
+                _globalGameDatas[i].name = entries[i].Username;
+                _globalGameDatas[i].time = entries[i].Score;
+            }
+            
+            if(_globalGameDatas == null) return;
+
+            // push the loaded data to all other scripts that need it
+            foreach (ILoad dataPersistanceObj in _dataLoads)
+            {
+                dataPersistanceObj.LoadDataGlobal(_globalGameDatas);
+                Debug.Log("Load<color=#caf179ff> Global </color>Data");
+            }
+        
+            Debug.Log("<color=#caf179ff> Global </color> data loaded");
+        });
+        #endregion
+        
+        Debug.Log("Exit Data load call");
     }
 
     public void SaveGame()
@@ -93,18 +113,20 @@ public class DataPersistanceManager : MonoBehaviour
         // pass the data to other scripts so they can update it
         foreach (ISave dataPersistanceObj in _dataSaves)
         {
-            dataPersistanceObj.SaveData(ref _gameData, ref _simplifyGameData);
+            dataPersistanceObj.SaveData(_gameDatas, out _gameDatas, out _currentRunData);
         }
 
+        if(_currentRunData.time < 0) return;
+        
         // save that data to a file using the data handler
-        _dataHandler.Save(_gameData);
+        _dataHandler.Save(_gameDatas);
 
         //Check for name
-        for (int i = 0; i < _gameData.time.Length; i++)
+        for (int i = 0; i < _gameDatas.Length; i++)
         {
-            if (_gameData.name[i] == _simplifyGameData.name)
+            if (_gameDatas[i].name == _currentRunData.name)
             {
-                if (_gameData.time[i] < _simplifyGameData.time)
+                if (_gameDatas[i].time < _currentRunData.time)
                 {
                     uRnotFastest = true;
                 }
@@ -113,8 +135,18 @@ public class DataPersistanceManager : MonoBehaviour
 
         if (!uRnotFastest)
         {
-            //playfabManager.SendLeaderboard(_simplifyGameData);
-            Debug.Log("Uploaded");
+            Leaderboards.test.UploadNewEntry(_currentRunData.name, _currentRunData.time, isSuccessful =>
+            {
+                if (isSuccessful)
+                {
+                    Debug.Log("Uploaded");
+                    LoadGame();
+                }
+                else
+                {
+                    Debug.LogWarning("Failed to upload");
+                }
+            });
         }
     }
 

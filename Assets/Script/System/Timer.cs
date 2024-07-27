@@ -18,7 +18,6 @@ public class Timer : MonoBehaviour, ISave
     public TMP_Dropdown country;
     public TMP_Text resultTimer;
     public TMP_Text dateText;
-    public PlayfabManager playfabManager;
 
     [Header("Status")]
     public bool saveUpdate;
@@ -94,8 +93,11 @@ public class Timer : MonoBehaviour, ISave
     //     return record;
     // }
 
-    public void SaveData(ref GameData data, ref SimplifyGameData simpleData)
+    public void SaveData(GameData[] data,out GameData[] outputData, out GameData currentRun)
     {
+        currentRun = new GameData();
+        outputData = data;
+        
         saveUpdate = false;
         recordUpdated = false;
 
@@ -106,19 +108,23 @@ public class Timer : MonoBehaviour, ISave
         int wholeTime = Int32.Parse(_minute.ToString() + timerToInt.ToString()); // 00 00 00
         
         Debug.Log(wholeTime);
+        Debug.Log($"Data Length is {data.Length}");
 
-        int recordLimiter = data.time.Length;
+        if (data.Length <= 0) return;
+        
+        int recordLimiter = data.Length;
 
         int tempTime = wholeTime;
         string tempName = country.options[country.value].text+username.text;
         
         for (int i = 0; i < recordLimiter; i++)
         {
-            Debug.Log(data.time[i] + data.name[i]);
-            if (tempTime < data.time[i] || data.time[i] == 0)
+            Debug.Log($"Start update {i} entry");
+            Debug.Log(data[i].time + data[i].name);
+            if (tempTime < data[i].time || data[i].time == -1)
             {
-                (data.time[i], tempTime) = (tempTime, data.time[i]);
-                (data.name[i], tempName) = (tempName, data.name[i]);
+                (data[i].time, tempTime) = (tempTime, data[i].time);
+                (data[i].name, tempName) = (tempName, data[i].name);
 
                 saveUpdate = true;
 
@@ -126,10 +132,10 @@ public class Timer : MonoBehaviour, ISave
                 {
                     recordUpdated = true;
 
-                    simpleData.time = wholeTime;
-                    simpleData.name = country.options[country.value].text+username.text;
+                    currentRun.time = wholeTime;
+                    currentRun.name = country.options[country.value].text+username.text;
                     
-                    Debug.Log($"Simplify Data Update : {simpleData.time} by {simpleData.name}");
+                    Debug.Log($"Simplify Data Update : {currentRun.time} by {currentRun.name}");
                 }
                 
                 Debug.Log("Saved Data");

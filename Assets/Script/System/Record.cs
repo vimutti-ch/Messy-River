@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Record : MonoBehaviour, ILoad
+public class Record : Singleton<Record>, ILoad
 {
     #region - Variable Declaration (การประกาศตัวแปร) -
 
@@ -25,6 +25,8 @@ public class Record : MonoBehaviour, ILoad
     public Flag countryInfo;
     
     private RectTransform prRect;
+
+    #region List of Recorded Variables
 
     private int[] _minute;
     private int[] _second;
@@ -61,33 +63,27 @@ public class Record : MonoBehaviour, ILoad
     public Sprite[] FlagGlobal => _flagGlobal;
     public string[] WholeTimeGlobal => _wholeTimeGlobal;
     public string[] DisplayTimeGlobal => _displayTimeGlobal;
-    
-    public static Record Instance;
+
+    #endregion
     
     #endregion
 
+    private GameData[] datas;
+    
     #region - Unity's Method (คำสั่งของ Unity เอง) -
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(Instance);
-        }
-        else
-        {
-            Destroy(Instance);
-        }
-    }
 
     #endregion
 
     #region - Custom Method (คำสั่งที่เขียนขึ้นมาเอง) -
 
-    public void LoadData(GameData data)
+    public void LoadData(GameData[] data)
     {
-        int dataQuantity = data.time.Length;
+        datas = data;
+        
+        if(data.Length <= 0) return;
+        
+        int dataQuantity = data.Length;
+        Debug.Log("<color=#3c7cd0ff>Local</color> Data Quantity: " + dataQuantity);
 
         _minute = new int[dataQuantity];
         _second = new int[dataQuantity];
@@ -100,21 +96,55 @@ public class Record : MonoBehaviour, ILoad
 
         for (int i = 0; i < dataQuantity; i++)
         {
-            if (string.IsNullOrEmpty(data.name[i])) return;
+            Debug.Log(i);
+            if (data[i].time < 0) continue;
 
-            _wholeTime[i] = data.time[i].ToString();
+            _wholeTime[i] = data[i].time.ToString();
 
             TimeFormatter(_wholeTime[i], out _minute[i], out _second[i], out _millisecond[i]);
             _displayTime[i] = TimeDisplayFormatter(_minute[i], _second[i], _millisecond[i]);
 
-            this._name[i] = data.name[i].Substring(3);
-            this._country[i] = data.name[i].Substring(0, 3).ToUpper();
+            this._name[i] = data[i].name.Substring(3);
+            this._country[i] = data[i].name.Substring(0, 3).ToUpper();
             this._flag[i] = FindFlag(_country[i]);
 
-            Debug.Log($"Load Data #{i}: {_name[i]} - {_wholeTime[i]}");
+            Debug.Log($"<color=#3c7cd0ff>Local</color> Data #{i}: {_name[i]} - {_wholeTime[i]}");
         }
+        Debug.LogWarning("Exit Load<color=#3c7cd0ff> Local </color>Data");
         
         CreateLocalLeaderboard();
+    }
+
+    public void LoadDataGlobal(GameData[] data)
+    {
+        datas = data;
+        
+        if(data.Length <= 0) return;
+        
+        int dataQuantity = data.Length;
+        Debug.Log("<color=#3c7cd0ff> Global </color> Data Quantity: " + dataQuantity);
+
+        CreateGlobalRecord(dataQuantity);
+
+        for (int i = 0; i < dataQuantity; i++)
+        {
+            Debug.Log(i);
+            if (data[i].time < 0) continue;
+
+            GlobalRecordSetter(i, data[i].name, data[i].time);
+            // _wholeTimeGlobal[i] = data[i].time.ToString();
+            //
+            // TimeFormatter(_wholeTimeGlobal[i], out _minuteGlobal[i], out _secondGlobal[i], out _millisecondGlobal[i]);
+            // _displayTimeGlobal[i] = TimeDisplayFormatter(_minuteGlobal[i], _secondGlobal[i], _millisecondGlobal[i]);
+            //
+            // this._nameGlobal[i] = data[i].name.Substring(3);
+            // this._countryGlobal[i] = data[i].name.Substring(0, 3).ToUpper();
+            // this._flagGlobal[i] = FindFlag(_country[i]);
+
+            Debug.Log($"Load Data #{i}: {_nameGlobal[i]} - {_wholeTimeGlobal[i]}");
+        }
+        
+        CreateGlobalLeaderboard();
     }
 
     public void CreateGlobalRecord(int dataQuantity)
@@ -180,24 +210,26 @@ public class Record : MonoBehaviour, ILoad
 
     private void CreateLocalLeaderboard()
     {
-        Debug.Log("Start Create Leaderboard");
+        Debug.LogFormat("Start Create <color=#3c7cd0ff>Local</color> Leaderboard");
         
         prRect = puRect;
         y = prRect.localPosition.y - space;
 
-        string[] timeFormatted = new string[recordLimiter];
-
-        Debug.LogWarning($"Limiter is {recordLimiter}");
+        int actualLimit = Mathf.Min(recordLimiter, _name.Length);
         
-        Debug.Log("Before loop");
-        for (int i = 0; i < recordLimiter; i++)
+        string[] timeFormatted = new string[actualLimit];
+
+        Debug.LogWarning($"<color=#3c7cd0ff>Local</color> Limiter is {actualLimit}");
+        
+        Debug.Log("Before <color=#3c7cd0ff>Local</color> loop");
+        for (int i = 0; i < actualLimit; i++)
         {
-            Debug.LogWarning("Created Leaderboard");
+            Debug.LogWarning("Created <color=#3c7cd0ff>Local</color> Leaderboard");
             
-            Debug.Log("Enter Loop");
+            Debug.Log("Enter <color=#3c7cd0ff>Local</color> Loop");
             if (_name[i] == null)
             {
-                Debug.Log("Return");
+                Debug.Log("Return <color=#3c7cd0ff>Local</color>");
                 return;
             }
             
@@ -218,30 +250,32 @@ public class Record : MonoBehaviour, ILoad
 
             //y = y - space;
             
-            Debug.Log("Leaderboard Created");
+            Debug.Log("<color=#3c7cd0ff>Local</color> Leaderboard Created");
         }
         
-        Debug.Log("Stop Create Leaderboard");
+        Debug.Log("Stop Create <color=#3c7cd0ff>Local</color> Leaderboard");
     }
     
     public void CreateGlobalLeaderboard()
     {
-        Debug.Log("Start Create Leaderboard");
+        Debug.LogFormat("Start Create <color=#caf179ff>Global</color> Leaderboard");
         
         prRect = puRect;
         y = prRect.localPosition.y - space;
 
-        string[] timeFormatted = new string[recordLimiter];
+        int actualLimit = Mathf.Min(recordLimiter, _nameGlobal.Length);
         
-        Debug.LogWarning($"Limiter is {recordLimiter}");
+        string[] timeFormatted = new string[actualLimit];
         
-        Debug.Log("Before loop");
-        for (int i = 0; i < recordLimiter; i++)
+        Debug.LogWarning($"<color=#caf179ff>Global</color> Limiter is {actualLimit}");
+        
+        Debug.Log("Before <color=#caf179ff>Global</color> loop");
+        for (int i = 0; i < actualLimit; i++)
         {
-            Debug.LogWarning("Created Leaderboard");
+            Debug.LogWarning("Created <color=#caf179ff>Global</color> Leaderboard");
             
-            Debug.Log("Enter Loop");
-            if (_name[i] == null)
+            Debug.Log("Enter <color=#caf179ff>Global</color> Loop");
+            if (_nameGlobal[i] == null)
             {
                 Debug.Log("Return");
                 return;
@@ -260,14 +294,14 @@ public class Record : MonoBehaviour, ILoad
 
             RecordLine line = obj.GetComponent<RecordLine>();
 
-            line.SetRecord(timeFormatted[i], this._flag[i], this._nameGlobal[i]);
+            line.SetRecord(timeFormatted[i], this._flagGlobal[i], this._nameGlobal[i]);
 
             //y = y - space;
             
-            Debug.Log("Leaderboard Created");
+            Debug.Log("<color=#caf179ff>Global</color> Leaderboard Created");
         }
         
-        Debug.Log("Stop Create Leaderboard");
+        Debug.Log("Stop Create <color=#caf179ff>Global</color> Leaderboard");
     }
 
     private Sprite FindFlag(string countryAbbreviate)

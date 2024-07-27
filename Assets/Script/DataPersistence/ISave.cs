@@ -1,4 +1,4 @@
 public interface ISave
 {
-    void SaveData(ref GameData data, ref SimplifyGameData simpleData);
+    public void SaveData(GameData[] data, out GameData[] outputData, out GameData currentRun);
 }

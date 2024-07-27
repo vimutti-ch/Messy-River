@@ -13,11 +13,11 @@ public class FileDataHandler
         this.dataFileName = dataFileName;
     }
 
-    public GameData Load()
+    public GameData[] Load()
     {
         // use Path.Combine to account for different OS's having different path separators
         string fullPath = Path.Combine(dataDirPath,dataFileName); // Alternative: dataDirPath + "/" + dataFileName
-        GameData loadedData = null;
+        // GameData[] loadedData = new GameData[5];
         if (File.Exists(fullPath))
         {
             try
@@ -34,9 +34,20 @@ public class FileDataHandler
                 }
                 
                 // Deserialize the data from Json back into the C# object
-                loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+                DataWrapper loadedData = JsonUtility.FromJson<DataWrapper>(dataToLoad);
+                
+                // Convert the loaded data into the GameData array
+                GameData[] gameData = new GameData[loadedData.name.Length];
+                
+                for (int i = 0; i < loadedData.name.Length; i++)
+                {
+                    gameData[i] = new GameData();
+                    gameData[i].time = loadedData.time[i];
+                    gameData[i].name = loadedData.name[i];
+                }
                 
                 Debug.Log("Load Complete");
+                return gameData;
             }
             catch (Exception e)
             {
@@ -44,11 +55,21 @@ public class FileDataHandler
             }
         }
 
-        return loadedData;
+        return null;
     }
 
-    public void Save(GameData data)
+    public void Save(GameData[] data)
     {
+        int size = data.Length;
+        
+        DataWrapper dataWrapper = new DataWrapper(size);
+        
+        for (int i = 0; i < size; i++)
+        {
+            dataWrapper.time[i] = data[i].time;
+            dataWrapper.name[i] = data[i].name;
+        }
+        
         // use Path.Combine to account for different OS's having different path separators
         string fullPath = Path.Combine(dataDirPath,dataFileName); // Alternative: dataDirPath + "/" + dataFileName
 
@@ -58,7 +79,7 @@ public class FileDataHandler
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
             
             // Serialize the C# game data object into Json
-            string dataToStore = JsonUtility.ToJson(data, true);
+            string dataToStore = JsonUtility.ToJson(dataWrapper, true);
             
             // Write the serialized data to the file
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
