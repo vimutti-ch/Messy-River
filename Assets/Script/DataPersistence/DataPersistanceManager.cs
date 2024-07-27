@@ -15,7 +15,6 @@ public class DataPersistanceManager : MonoBehaviour
     private List<ISave> _dataSaves; //ตัวเก็บ Obj ทุก ๆ ชิ้นที่มีการใช้งาน IDataPersistance
     private FileDataHandler _dataHandler;
 
-    public PlayfabManager playfabManager;
     public static DataPersistanceManager Instance { get; private set; }
 
     public GameData GameData => _gameData;
@@ -56,7 +55,7 @@ public class DataPersistanceManager : MonoBehaviour
         if(useTryCatch)
         try
         {
-            playfabManager.GetLeaderboard();
+            // playfabManager.GetLeaderboard();
         }
         catch (Exception e)
         {
@@ -64,7 +63,7 @@ public class DataPersistanceManager : MonoBehaviour
         }
         else
         {
-            playfabManager.GetLeaderboard();
+            // playfabManager.GetLeaderboard();
         }
         
         Debug.Log("Get Leaderboard done");

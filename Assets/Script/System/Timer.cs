@@ -18,7 +18,6 @@ public class Timer : MonoBehaviour, ISave
     public TMP_Dropdown country;
     public TMP_Text resultTimer;
     public TMP_Text dateText;
-    public PlayfabManager playfabManager;
 
     [Header("Status")]
     public bool saveUpdate;
