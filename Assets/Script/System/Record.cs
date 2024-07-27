@@ -66,6 +66,8 @@ public class Record : MonoBehaviour, ILoad
     
     #endregion
 
+    private GameData[] datas;
+    
     #region - Unity's Method (คำสั่งของ Unity เอง) -
 
     private void Awake()
@@ -85,9 +87,14 @@ public class Record : MonoBehaviour, ILoad
 
     #region - Custom Method (คำสั่งที่เขียนขึ้นมาเอง) -
 
-    public void LoadData(GameData data)
+    public void LoadData(GameData[] data)
     {
-        int dataQuantity = data.time.Length;
+        datas = data;
+        
+        if(data.Length <= 0) return;
+        
+        int dataQuantity = data.Length;
+        Debug.Log("Data Quantity: " + dataQuantity);
 
         _minute = new int[dataQuantity];
         _second = new int[dataQuantity];
@@ -100,15 +107,16 @@ public class Record : MonoBehaviour, ILoad
 
         for (int i = 0; i < dataQuantity; i++)
         {
-            if (string.IsNullOrEmpty(data.name[i])) return;
+            Debug.Log(i);
+            if (data[i].time < 0) return;
 
-            _wholeTime[i] = data.time[i].ToString();
+            _wholeTime[i] = data[i].time.ToString();
 
             TimeFormatter(_wholeTime[i], out _minute[i], out _second[i], out _millisecond[i]);
             _displayTime[i] = TimeDisplayFormatter(_minute[i], _second[i], _millisecond[i]);
 
-            this._name[i] = data.name[i].Substring(3);
-            this._country[i] = data.name[i].Substring(0, 3).ToUpper();
+            this._name[i] = data[i].name.Substring(3);
+            this._country[i] = data[i].name.Substring(0, 3).ToUpper();
             this._flag[i] = FindFlag(_country[i]);
 
             Debug.Log($"Load Data #{i}: {_name[i]} - {_wholeTime[i]}");

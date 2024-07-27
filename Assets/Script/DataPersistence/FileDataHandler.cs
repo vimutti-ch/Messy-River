@@ -13,11 +13,11 @@ public class FileDataHandler
         this.dataFileName = dataFileName;
     }
 
-    public GameData Load()
+    public GameData[] Load()
     {
         // use Path.Combine to account for different OS's having different path separators
         string fullPath = Path.Combine(dataDirPath,dataFileName); // Alternative: dataDirPath + "/" + dataFileName
-        GameData loadedData = null;
+        GameData[] loadedData = new GameData[5];
         if (File.Exists(fullPath))
         {
             try
@@ -34,7 +34,7 @@ public class FileDataHandler
                 }
                 
                 // Deserialize the data from Json back into the C# object
-                loadedData = JsonUtility.FromJson<GameData>(dataToLoad);
+                loadedData = JsonUtility.FromJson<GameData[]>(dataToLoad);
                 
                 Debug.Log("Load Complete");
             }
@@ -47,7 +47,7 @@ public class FileDataHandler
         return loadedData;
     }
 
-    public void Save(GameData data)
+    public void Save(GameData[] data)
     {
         // use Path.Combine to account for different OS's having different path separators
         string fullPath = Path.Combine(dataDirPath,dataFileName); // Alternative: dataDirPath + "/" + dataFileName

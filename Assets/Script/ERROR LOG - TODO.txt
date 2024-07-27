@@ -1,0 +1,39 @@
+﻿[LeaderboardCreator] Username cannot be null or empty!
+UnityEngine.Debug:LogError (object)
+Dan.Main.LeaderboardCreator:LogError (string) (at Assets/LeaderboardCreator/Scripts/Main/LeaderboardCreator.cs:320)
+Dan.Main.LeaderboardCreator:UploadNewEntry (string,string,int,string,System.Action`1<bool>,System.Action`1<string>) (at Assets/LeaderboardCreator/Scripts/Main/LeaderboardCreator.cs:174)
+Dan.Main.LeaderboardCreator:UploadNewEntry (string,string,int,System.Action`1<bool>,System.Action`1<string>) (at Assets/LeaderboardCreator/Scripts/Main/LeaderboardCreator.cs:153)
+Dan.Main.LeaderboardReference:UploadNewEntry (string,int,System.Action`1<bool>,System.Action`1<string>) (at Assets/LeaderboardCreator/Scripts/Main/LeaderboardReference.cs:13)
+DataPersistanceManager:SaveGame () (at Assets/Script/DataPersistence/DataPersistanceManager.cs:135)
+Move:SaveRecord () (at Assets/Script/Player/Move.cs:170)
+UnityEngine.Events.UnityEvent`1<string>:Invoke (string)
+TMPro.TMP_InputField:SendOnEndEdit () (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:3149)
+TMPro.TMP_InputField:ReleaseSelection () (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:4146)
+TMPro.TMP_InputField:DeactivateInputField (bool) (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:4184)
+TMPro.TMP_InputField:OnUpdateSelected (UnityEngine.EventSystems.BaseEventData) (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:2161)
+UnityEngine.EventSystems.EventSystem:Update () (at ./Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/EventSystem.cs:530)
+
+----------------------------
+
+NullReferenceException: Object reference not set to an instance of an object
+DataToLeaderboard.UpdateGlobalLeaderBoard () (at Assets/Script/System/DataToLeaderboard.cs:53)
+UnityEngine.Events.InvokableCall.Invoke () (at <c5ed782439084ef1bc2ad85eec89e9fe>:0)
+UnityEngine.Events.UnityEvent`1[T0].Invoke (T0 arg0) (at <c5ed782439084ef1bc2ad85eec89e9fe>:0)
+TMPro.TMP_InputField.SendOnEndEdit () (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:3149)
+TMPro.TMP_InputField.ReleaseSelection () (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:4146)
+TMPro.TMP_InputField.DeactivateInputField (System.Boolean clearSelection) (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:4184)
+TMPro.TMP_InputField.OnUpdateSelected (UnityEngine.EventSystems.BaseEventData eventData) (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:2161)
+UnityEngine.EventSystems.ExecuteEvents.Execute (UnityEngine.EventSystems.IUpdateSelectedHandler handler, UnityEngine.EventSystems.BaseEventData eventData) (at ./Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/ExecuteEvents.cs:106)
+UnityEngine.EventSystems.ExecuteEvents.Execute[T] (UnityEngine.GameObject target, UnityEngine.EventSystems.BaseEventData eventData, UnityEngine.EventSystems.ExecuteEvents+EventFunction`1[T1] functor) (at ./Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/ExecuteEvents.cs:272)
+UnityEngine.EventSystems.EventSystem:Update() (at ./Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/EventSystem.cs:530)
+
+-----------------------------
+
+NullReferenceException: Object reference not set to an instance of an object
+DataToLeaderboard.UpdateGlobalLeaderBoard () (at Assets/Script/System/DataToLeaderboard.cs:53)
+UnityEngine.Events.InvokableCall.Invoke () (at <c5ed782439084ef1bc2ad85eec89e9fe>:0)
+UnityEngine.Events.UnityEvent`1[T0].Invoke (T0 arg0) (at <c5ed782439084ef1bc2ad85eec89e9fe>:0)
+TMPro.TMP_InputField.SendOnEndEdit () (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:3149)
+TMPro.TMP_InputField.ReleaseSelection () (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:4146)
+TMPro.TMP_InputField.DeactivateInputField (System.Boolean clearSelection) (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:4184)
+TMPro.TMP_InputField.OnDisable () (at ./Library/PackageCache/com.unity.textmeshpro@3.0.6/Scripts/Runtime/TMP_InputField.cs:1093)

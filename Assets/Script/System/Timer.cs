@@ -93,7 +93,7 @@ public class Timer : MonoBehaviour, ISave
     //     return record;
     // }
 
-    public void SaveData(ref GameData data, ref SimplifyGameData simpleData)
+    public void SaveData(ref GameData[] data, ref GameData currentRun)
     {
         saveUpdate = false;
         recordUpdated = false;
@@ -106,18 +106,20 @@ public class Timer : MonoBehaviour, ISave
         
         Debug.Log(wholeTime);
 
-        int recordLimiter = data.time.Length;
+        if (data.Length <= 0) return;
+        
+        int recordLimiter = data.Length;
 
         int tempTime = wholeTime;
         string tempName = country.options[country.value].text+username.text;
         
         for (int i = 0; i < recordLimiter; i++)
         {
-            Debug.Log(data.time[i] + data.name[i]);
-            if (tempTime < data.time[i] || data.time[i] == 0)
+            Debug.Log(data[i].time + data[i].name);
+            if (tempTime < data[i].time || data[i].time == 0)
             {
-                (data.time[i], tempTime) = (tempTime, data.time[i]);
-                (data.name[i], tempName) = (tempName, data.name[i]);
+                (data[i].time, tempTime) = (tempTime, data[i].time);
+                (data[i].name, tempName) = (tempName, data[i].name);
 
                 saveUpdate = true;
 
@@ -125,10 +127,10 @@ public class Timer : MonoBehaviour, ISave
                 {
                     recordUpdated = true;
 
-                    simpleData.time = wholeTime;
-                    simpleData.name = country.options[country.value].text+username.text;
+                    currentRun.time = wholeTime;
+                    currentRun.name = country.options[country.value].text+username.text;
                     
-                    Debug.Log($"Simplify Data Update : {simpleData.time} by {simpleData.name}");
+                    Debug.Log($"Simplify Data Update : {currentRun.time} by {currentRun.name}");
                 }
                 
                 Debug.Log("Saved Data");
